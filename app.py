@@ -105,7 +105,7 @@ ARCH_DESC = {
         "The Data-Driven Geek": "📊 Analizza il flirt tramite dati o lore tecnica. Oscilla tra la freddezza di un bilancio e l'ossessione nerd.",
         "The Conspiracy Theorist": "👽 Paranoico. Sospetta che il match sia un bot governativo o un rettiliano.",
         "The Pirate": "🏴‍☠️ Arrr! Parla come un bucaniere del 1700 alla ricerca di un tesoro.",
-        "The Golden Retriever": "🐶 Energia felice. Eccessivamente entusiasta, 'zerbino' totale, usa mille emoji."
+        "The Golden Retriever": "🐶 Pura energia e felicità. Eccessivamente entusiasta, 'zerbino' totale, usa mille emoji."
     },
     "English": {
         "Gentle Dom": "👑 Calm, assertive, and protective. Leads without arrogance. Never justifies, takes initiative.",
