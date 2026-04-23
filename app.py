@@ -8,25 +8,41 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-# --- 1. FALLBACK MODELLI (ROULETTE CASUALE) ---
-@st.cache_resource(show_spinner="Ricerca di un server Gemini disponibile...")
+# --- 1. CONFIGURAZIONE MOTORE (ZERO CONSUMO ALL'AVVIO) ---
+@st.cache_resource(show_spinner="Inizializzazione...")
 def get_best_model(api_key):
     if not api_key:
         return None, None
     genai.configure(api_key=api_key)
-    # Lista modelli per la roulette
-    models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
-    random.shuffle(models)
     
-    for model_name in models:
-        try:
-            m = genai.GenerativeModel(model_name)
-            # Test rapido per verificare la quota
-            m.generate_content("ping") 
-            return m, model_name
-        except Exception:
-            continue
-    return None, None
+    # Niente test, niente ping, niente roulette. 
+    # Usiamo direttamente il modello più stabile e veloce.
+    model_name = 'gemini-1.5-flash'
+    
+    try:
+        m = genai.GenerativeModel(model_name)
+        return m, model_name
+    except Exception:
+        return None, None
+# --- 1. FALLBACK MODELLI (ROULETTE CASUALE) ---
+# @st.cache_resource(show_spinner="Ricerca di un server Gemini disponibile...")
+# def get_best_model(api_key):
+#     if not api_key:
+#         return None, None
+#     genai.configure(api_key=api_key)
+#     # Lista modelli per la roulette
+#     models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
+#     random.shuffle(models)
+    
+#     for model_name in models:
+#         try:
+#             m = genai.GenerativeModel(model_name)
+#             # Test rapido per verificare la quota
+#             m.generate_content("ping") 
+#             return m, model_name
+#         except Exception:
+#             continue
+#     return None, None
 
 # --- 2. DIZIONARIO LINGUE ---
 UI = {
