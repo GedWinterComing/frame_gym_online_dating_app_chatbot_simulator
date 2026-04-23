@@ -238,7 +238,7 @@ with tab_coach:
     if st.button(t["coach_btn"], type="primary"):
         if chat_input:
             with st.spinner("Analisi in corso..."):
-                res = model.generate_content(f"Analizza il frame di questa chat in modo spietato e clinico:\n{chat_input}")
+                res = model.generate_content(f"Analizza il frame di questa chat in modo spietato e clinico e fornisci un esempio di come l'utente avrebbe dovuto rispondere per mantenere il frame e poi scrivi una Chat da Maestro ovvero prosegui la simulazione per 9 botta e risposta ideali mostrando come un vero maestro avrebbe gestito e ribaltato la situazione:\n{chat_input}")
                 st.markdown(res.text)
 # --- 1. FALLBACK MODELLI (ROULETTE CASUALE) ---
 # @st.cache_resource(show_spinner="Ricerca di un server Gemini disponibile...")
