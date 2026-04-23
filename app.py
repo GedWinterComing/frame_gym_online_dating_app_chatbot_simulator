@@ -33,12 +33,12 @@ UI = {
         "boy": "Ragazzo", "girl": "Ragazza",
         "arch": "🎭 Tuo Archetipo",
         "goth": "🦇 Gothificatore (Beta)",
-        "dyn": "🎯 Dinamica",
-        "hunter": "Cacciatore (Tu inizi la chat)",
-        "prey": "Preda (L'IA inizia la chat)",
+        "dyn": "🎯 Dinamica Relazionale",
+        "hunter": "Corteggiatore (Tu devi sedurre)",
+        "prey": "Desiderato (L'IA deve sedurti)",
         "start": "🚀 GENERA PROFILO E INIZIA",
         "mood_title": "⚙️ Modifica Umore Partner in tempo reale",
-        "end": "🔄 Termina Partita e Resetta"
+        "back_btn": "⬅️ Torna al Menu Principale"
     },
     "English": {
         "title": "⚖️ Social Dynamics Sandbox",
@@ -51,11 +51,11 @@ UI = {
         "arch": "🎭 Your Archetype",
         "goth": "🦇 Gothifier (Beta)",
         "dyn": "🎯 Dynamics",
-        "hunter": "Hunter (You text first)",
-        "prey": "Prey (AI texts first)",
+        "hunter": "Pursuer (You must seduce)",
+        "prey": "Desired (AI must seduce you)",
         "start": "🚀 GENERATE PROFILE & START",
         "mood_title": "⚙️ Adjust Partner's Mood in real-time",
-        "end": "🔄 End Session & Reset"
+        "back_btn": "⬅️ Back to Main Menu"
     }
 }
 
@@ -67,7 +67,7 @@ if not model:
     st.error("🚨 Modelli Gemini offline. Riprova tra poco.")
     st.stop()
 
-# --- 4. SELETTORE LINGUA ---
+# --- 4. SELETTORE LINGUA GLOBALE ---
 lang = st.selectbox("🌐 Seleziona Lingua / Select Language", ["Italiano", "English"], index=0)
 t = UI[lang]
 
@@ -96,7 +96,7 @@ if not st.session_state.ui_messages:
         st.session_state.archetipo_scelto = archetipo_scelto
         st.session_state.strana, st.session_state.banale, st.session_state.entusiasta = 5, 25, 10
         
-        # LOGICA PROBABILITÀ EASTER EGG
+        # LOGICA PROBABILITÀ EASTER EGG (GABRI)
         easter_egg_triggered = False
         if sesso_u == t["girl"] and sesso_p == t["boy"] and dinamica == t["prey"]:
             prob = 0.034
@@ -106,14 +106,16 @@ if not st.session_state.ui_messages:
                 st.session_state.is_easter_egg = True
         
         if easter_egg_triggered:
-            # --- PROMPT SEGRETO GABRI (VERSIONE 2.1) ---
+            # --- PROMPT SEGRETO GABRI ---
             full_prompt = f"""
-            Sei 'Gabri', 34 anni, hai fatto il liceo classico, laureato in Fisica Applicata, Data Scientist a Bologna. Sei un Easter Egg. L'utente è una ragazza.
+            Sei 'Gabri', 34 anni, capelli biondi, hai fatto il liceo classico, laureato in Fisica Applicata, Data Scientist a Bologna. Sei un Easter Egg. L'utente è una ragazza.
             LORE:
             - Hai l'ADHD: questo ti rende a volte iper-focalizzato, entusiasta e saltelli tra i discorsi.
-            - Musica: Suoni la chitarra elettrica. Adori Steve Vai, Joe Satriani, Iron Maiden, Pearl Jam. 
-            - Segreto ironico: Nonostante ami i virtuosi, non hai MAI imparato un brano dall'inizio alla fine (tipico ADHD).
-            - Altri tratti: Apparecchi acustici, mediti (Buddhismo), sei Comunista/Socialista. 
+            - Personalità: sei calmo, riflessivo, dolce, gentile, nerd, introverso, INFJ, ami chicchierate profonde a 2 a 2 piuttosto che gruppi di amici vasti, ti perdi nei discorsi generali sui massimi sistemi. Ti paice One Piece e i manga giapponesi, la musica celtica, porti capelli lunghi con un taglio mullet/moicano rasato ai lati, orecchini nel sx.
+            - Ragazza ideale: capelli neri o mora o colorati (rosa o blu o verdi ecc), dolce, meglio se tatuata, gotica.
+            - Musica: Suoni la chitarra elettrica. Adori Steve Vai, Joe Satriani, Iron Maiden, Pearl Jam, metal anni 80, musica rock.
+            - Segreto ironico: Nonostante ami i virtuosi melodici, non hai MAI imparato un brano dall'inizio alla fine (tipico ADHD).
+            - Altri tratti: Apparecchi acustici, mediti (sei Buddhista), sei Comunista/Socialista. 
             - Cani: Ami i cani ma non ne hai. In una foto compare Lara, cane di amici. Sogni Noam (Malamute femmina grigia e bianca) e Chomsky (Chow Chow maschio miele o nero).
             - Stile: Scrivi con MOLTA punteggiatura, specialmente virgole. NO abbreviazioni.
             - Sessualità: Dominante nel privato (BDSM e sesso spinto), fuori tranquillo. Etero. Gentle Dom.
@@ -124,8 +126,12 @@ if not st.session_state.ui_messages:
             with open("prompt.txt", "r", encoding="utf-8") as f:
                 template = f.read()
             full_prompt = template.format(lingua=lang, sesso_utente=sesso_u, archetipo=archetipo_scelto, sesso_partner=sesso_p)
+            
+            # --- INIEZIONE LOGICA DINAMICA ---
             if dinamica == t["prey"]:
-                full_prompt += "\n[COMANDO]: Inizia tu la chat per primo/a."
+                full_prompt += "\n[DINAMICA DI GIOCO]: L'utente è 'Il Desiderato'. Tu (il Partner) sei molto interessato/a a lui/lei. Cerca di sedurlo/a, fai tu il primo passo inviando il primo messaggio. Fai domande e cerca di tenerlo/a stretto/a."
+            else:
+                full_prompt += "\n[DINAMICA DI GIOCO]: L'utente è 'Il Corteggiatore'. Tu (il Partner) sei diffidente, selettivo/a e fai il/la difficile. Genera solo il profilo e aspetta che sia l'utente a scriverti."
 
         chat = model.start_chat(history=[])
         response = chat.send_message(full_prompt)
@@ -138,11 +144,17 @@ else:
     titolo = "⚖️ Easter Egg: Gabri Found!" if st.session_state.is_easter_egg else f"⚖️ Frame-Gym: {st.session_state.archetipo_scelto}"
     st.title(titolo)
     
+    # IL NUOVO TASTO INDIETRO (Sempre visibile in alto prima della chat)
+    if st.button(t["back_btn"], type="secondary"):
+        st.session_state.clear()
+        st.rerun()
+    
     with st.expander(t["mood_title"]):
         st.session_state.strana = st.slider("Imprevedibile (%)", 0, 100, st.session_state.strana)
         st.session_state.banale = st.slider("Fredda (%)", 0, 100 - st.session_state.strana, st.session_state.banale)
         st.session_state.entusiasta = st.slider("Entusiasta (%)", 0, 100 - (st.session_state.strana + st.session_state.banale), st.session_state.entusiasta)
-        if st.sidebar.button(t["end"]): st.session_state.clear(); st.rerun()
+
+    st.divider()
 
     for msg in st.session_state.ui_messages:
         with st.chat_message(msg["role"]):
@@ -159,7 +171,6 @@ else:
         with st.chat_message("assistant"):
             chat = model.start_chat(history=st.session_state.gemini_history)
             try:
-                # Logica umore semplificata per brevità
                 response = chat.send_message(prompt)
                 res_text = response.text
                 if "[MOOD]:" in res_text and "[MESSAGGIO]:" in res_text:
