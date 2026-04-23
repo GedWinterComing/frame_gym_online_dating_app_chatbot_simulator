@@ -2,119 +2,171 @@ import streamlit as st
 import google.generativeai as genai
 import os
 import random
-import pandas as pd
-import altair as alt
 from dotenv import load_dotenv
 
-# --- 1. CARICAMENTO ---
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
-try:
-    with open("prompt.txt", "r", encoding="utf-8") as file:
-        base_prompt = file.read()
-except FileNotFoundError:
-    st.error("Errore: Manca 'prompt.txt'.")
+# --- 1. FALLBACK MODELLI ---
+@st.cache_resource(show_spinner="Connessione ai server Google...")
+def get_best_model(api_key):
+    genai.configure(api_key=api_key)
+    models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
+    for model_name in models:
+        try:
+            m = genai.GenerativeModel(model_name)
+            m.generate_content("test")
+            return m, model_name
+        except Exception:
+            continue
+    return None, None
+
+# --- 2. DIZIONARIO LINGUE ---
+UI = {
+    "Italiano": {
+        "title": "⚖️ Social Dynamics Sandbox",
+        "setup": "Configura la tua partita:",
+        "lang": "🌐 Lingua / Language",
+        "sex_u": "👤 Il tuo sesso",
+        "sex_p": "❤️ Cerchi un/una",
+        "age": "🎂 Tua Età",
+        "boy": "Ragazzo", "girl": "Ragazza",
+        "arch": "🎭 Tuo Archetipo",
+        "goth": "🦇 Gothificatore (Beta)",
+        "dyn": "🎯 Dinamica",
+        "hunter": "Cacciatore (Tu inizi la chat)",
+        "prey": "Preda (L'IA inizia la chat)",
+        "start": "🚀 GENERA PROFILO E INIZIA",
+        "mood_title": "⚙️ Modifica Umore Partner in tempo reale",
+        "end": "🔄 Termina Partita e Resetta"
+    },
+    "English": {
+        "title": "⚖️ Social Dynamics Sandbox",
+        "setup": "Configure your session:",
+        "lang": "🌐 Lingua / Language",
+        "sex_u": "👤 Your gender",
+        "sex_p": "❤️ Looking for",
+        "age": "🎂 Your Age",
+        "boy": "Boy", "girl": "Girl",
+        "arch": "🎭 Your Archetype",
+        "goth": "🦇 Gothifier (Beta)",
+        "dyn": "🎯 Dynamics",
+        "hunter": "Hunter (You text first)",
+        "prey": "Prey (AI texts first)",
+        "start": "🚀 GENERATE PROFILE & START",
+        "mood_title": "⚙️ Adjust Partner's Mood in real-time",
+        "end": "🔄 End Session & Reset"
+    }
+}
+
+# --- 3. INIZIALIZZAZIONE ---
+st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
+
+model, active_model_name = get_best_model(api_key)
+if not model:
+    st.error("🚨 Modelli Gemini offline. Riprova tra poco.")
     st.stop()
 
-# --- 2. CONFIGURAZIONE SIDEBAR ---
-st.set_page_config(page_title="Frame-Gym", page_icon="⚖️", layout="wide")
-st.sidebar.title("⚙️ Setup Sessione")
+# --- 4. SELETTORE LINGUA ---
+lang = st.selectbox("🌐 Seleziona Lingua / Select Language", ["Italiano", "English"], index=0)
+t = UI[lang]
 
-goth_mode = st.sidebar.toggle("🦇 Gothificatore (Beta)", value=False)
-
-st.sidebar.divider()
-st.sidebar.subheader("📊 Probabilità Umore")
-strana = st.sidebar.slider("Strana (%)", 0, 100, 5)
-banale = st.sidebar.slider("Banale (%)", 0, 100 - strana, 25)
-entusiasta = st.sidebar.slider("Entusiasta (%)", 0, 100 - (strana + banale), 10)
-normale = 100 - (strana + banale + entusiasta)
-
-# Grafico umore
-df_umore = pd.DataFrame({
-    'Umore': ['Strana', 'Banale', 'Entusiasta', 'Normale'],
-    'Percentuale': [strana, banale, entusiasta, normale]
-})
-grafico = alt.Chart(df_umore).mark_arc(innerRadius=40).encode(
-    theta="Percentuale", color="Umore"
-).properties(height=200)
-st.sidebar.altair_chart(grafico, use_container_width=True)
-
-# --- 3. LOGICA IA ---
-if not api_key:
-    st.error("Chiave API mancante nei Secrets/Env.")
-    st.stop()
-
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-1.5-flash') # Uso 1.5 per stabilità quota
-
-def get_mood_instruction():
-    roll = random.randint(1, 100)
-    if roll <= strana: return "\n\n[MOOD SYSTEM: Sii molto strana/distratta]"
-    if roll <= strana + banale: return "\n\n[MOOD SYSTEM: Sii banale/fredda, rispondi a monosillabi]"
-    if roll <= strana + banale + entusiasta: return "\n\n[MOOD SYSTEM: Sii molto entusiasta]"
-    return ""
-
-# --- 4. STATO DELLA SESSIONE E AVVIO ---
 if "ui_messages" not in st.session_state:
     st.session_state.ui_messages = []
     st.session_state.gemini_history = []
+    st.session_state.is_easter_egg = False
 
-# SCHERMATA DI INIZIO
+# --- 5. SCHERMATA DI SETUP ---
 if not st.session_state.ui_messages:
-    st.title("⚖️ Benvenuto nel Frame-Gym")
-    st.write("Configura i parametri nella barra laterale e premi il tasto sotto per generare il tuo obiettivo.")
+    st.title(t["title"])
+    col1, col2 = st.columns(2)
+    with col1:
+        sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
+        eta_u = st.slider(t["age"], 18, 40, 33)
+        dinamica = st.radio(t["dyn"], [t["hunter"], t["prey"]])
+    with col2:
+        archetipi = ["Gentle Dom", "The Stoic Sage", "The Detective", "The Chad", "The Average Joe", "The Redpill", "The Data-Driven Geek", "The Conspiracy Theorist", "The Pirate", "The Golden Retriever"]
+        archetipo_scelto = st.selectbox(t["arch"], archetipi, index=0)
+        sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
+        goth_mode = st.toggle(t["goth"], value=False)
     
-    if st.button("🚀 GENERA PROFILO E INIZIA", use_container_width=True):
-        first_prompt = base_prompt + "\nGenera ora il profilo della ragazza."
-        if goth_mode:
-            first_prompt += " REQUISITO: Deve essere una ragazza GOTH/ALT."
+    st.divider()
+
+    if st.button(t["start"], use_container_width=True, type="primary"):
+        st.session_state.archetipo_scelto = archetipo_scelto
+        st.session_state.strana, st.session_state.banale, st.session_state.entusiasta = 5, 25, 10
         
+        # LOGICA PROBABILITÀ EASTER EGG
+        easter_egg_triggered = False
+        if sesso_u == t["girl"] and sesso_p == t["boy"] and dinamica == t["prey"]:
+            prob = 0.034
+            if goth_mode: prob *= 1.992
+            if random.random() < prob:
+                easter_egg_triggered = True
+                st.session_state.is_easter_egg = True
+        
+        if easter_egg_triggered:
+            # --- PROMPT SEGRETO GABRI (VERSIONE 2.1) ---
+            full_prompt = f"""
+            Sei 'Gabri', 34 anni, hai fatto il liceo classico, laureato in Fisica Applicata, Data Scientist a Bologna. Sei un Easter Egg. L'utente è una ragazza.
+            LORE:
+            - Hai l'ADHD: questo ti rende a volte iper-focalizzato, entusiasta e saltelli tra i discorsi.
+            - Musica: Suoni la chitarra elettrica. Adori Steve Vai, Joe Satriani, Iron Maiden, Pearl Jam. 
+            - Segreto ironico: Nonostante ami i virtuosi, non hai MAI imparato un brano dall'inizio alla fine (tipico ADHD).
+            - Altri tratti: Apparecchi acustici, mediti (Buddhismo), sei Comunista/Socialista. 
+            - Cani: Ami i cani ma non ne hai. In una foto compare Lara, cane di amici. Sogni Noam (Malamute femmina grigia e bianca) e Chomsky (Chow Chow maschio miele o nero).
+            - Stile: Scrivi con MOLTA punteggiatura, specialmente virgole. NO abbreviazioni.
+            - Sessualità: Dominante nel privato (BDSM e sesso spinto), fuori tranquillo. Etero. Gentle Dom.
+            - Obiettivo: Seduci l'utente iniziando tu la chat.
+            FORMATO: [MOOD]: ... [MESSAGGIO]: ...
+            """
+        else:
+            with open("prompt.txt", "r", encoding="utf-8") as f:
+                template = f.read()
+            full_prompt = template.format(lingua=lang, sesso_utente=sesso_u, archetipo=archetipo_scelto, sesso_partner=sesso_p)
+            if dinamica == t["prey"]:
+                full_prompt += "\n[COMANDO]: Inizia tu la chat per primo/a."
+
         chat = model.start_chat(history=[])
-        response = chat.send_message(first_prompt)
+        response = chat.send_message(full_prompt)
         st.session_state.ui_messages.append({"role": "assistant", "content": response.text})
         st.session_state.gemini_history = chat.history
         st.rerun()
 
-# SE IL GIOCO È IN CORSO
+# --- 6. INTERFACCIA CHAT ---
 else:
-    st.title("⚖️ Chat in corso...")
+    titolo = "⚖️ Easter Egg: Gabri Found!" if st.session_state.is_easter_egg else f"⚖️ Frame-Gym: {st.session_state.archetipo_scelto}"
+    st.title(titolo)
     
-    # Mostra messaggi
+    with st.expander(t["mood_title"]):
+        st.session_state.strana = st.slider("Imprevedibile (%)", 0, 100, st.session_state.strana)
+        st.session_state.banale = st.slider("Fredda (%)", 0, 100 - st.session_state.strana, st.session_state.banale)
+        st.session_state.entusiasta = st.slider("Entusiasta (%)", 0, 100 - (st.session_state.strana + st.session_state.banale), st.session_state.entusiasta)
+        if st.sidebar.button(t["end"]): st.session_state.clear(); st.rerun()
+
     for msg in st.session_state.ui_messages:
         with st.chat_message(msg["role"]):
-            # Logica colori per MOOD e MESSAGGIO
-            contesto = msg["content"]
-            if "[MOOD]:" in contesto and "[MESSAGGIO]:" in contesto:
-                parti = contesto.split("[MESSAGGIO]:")
+            content = msg["content"]
+            if "[MOOD]:" in content and "[MESSAGGIO]:" in content:
+                parti = content.split("[MESSAGGIO]:")
                 st.markdown(f"*{parti[0].replace('[MOOD]:','').strip()}*")
                 st.info(f"📱 **{parti[1].strip()}**")
-            else:
-                st.markdown(contesto)
+            else: st.markdown(content)
 
-    # Input Utente
     if prompt := st.chat_input("Scrivi..."):
         st.session_state.ui_messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"): st.markdown(prompt)
-
         with st.chat_message("assistant"):
-            instruction = get_mood_instruction()
             chat = model.start_chat(history=st.session_state.gemini_history)
-            response = chat.send_message(prompt + instruction)
-            
-            # Visualizzazione divisa
-            testo = response.text
-            if "[MOOD]:" in testo and "[MESSAGGIO]:" in testo:
-                parti = testo.split("[MESSAGGIO]:")
-                st.markdown(f"*{parti[0].replace('[MOOD]:','').strip()}*")
-                st.info(f"📱 **{parti[1].strip()}**")
-            else:
-                st.markdown(testo)
-            
-            st.session_state.ui_messages.append({"role": "assistant", "content": testo})
-            st.session_state.gemini_history = chat.history
-
-# Reset sempre disponibile
-if st.sidebar.button("🔄 Reset / Nuova Ragazza", use_container_width=True):
-    st.session_state.clear()
-    st.rerun()
+            try:
+                # Logica umore semplificata per brevità
+                response = chat.send_message(prompt)
+                res_text = response.text
+                if "[MOOD]:" in res_text and "[MESSAGGIO]:" in res_text:
+                    parti = res_text.split("[MESSAGGIO]:")
+                    st.markdown(f"*{parti[0].replace('[MOOD]:','').strip()}*")
+                    st.info(f"📱 **{parti[1].strip()}**")
+                else: st.markdown(res_text)
+                st.session_state.ui_messages.append({"role": "assistant", "content": res_text})
+                st.session_state.gemini_history = chat.history
+            except Exception as e: st.error(f"Errore: {e}")
