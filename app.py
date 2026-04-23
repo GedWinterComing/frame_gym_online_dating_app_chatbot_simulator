@@ -7,18 +7,29 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
-# --- 1. FALLBACK MODELLI ---
-@st.cache_resource(show_spinner="Connessione ai server Google...")
+# --- 1. FALLBACK MODELLI (ROULETTE CASUALE) ---
+@st.cache_resource(show_spinner="Ricerca di un server Gemini disponibile...")
 def get_best_model(api_key):
     genai.configure(api_key=api_key)
+    
+    # La nostra lista di modelli disponibili
     models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
+    
+    # Mescoliamo la lista in modo completamente casuale
+    random.shuffle(models)
+    
+    # Prova i modelli uno ad uno nel nuovo ordine casuale
     for model_name in models:
         try:
             m = genai.GenerativeModel(model_name)
+            # Facciamo il test per assicurarci che sia vivo e che tu abbia quota
             m.generate_content("test")
             return m, model_name
         except Exception:
+            # Se fallisce, passa automaticamente al prossimo modello nella lista mescolata
             continue
+            
+    # Se il ciclo finisce e la lista è esaurita (tutti hanno dato errore)
     return None, None
 
 # --- 2. DIZIONARIO LINGUE ---
