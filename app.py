@@ -15,7 +15,7 @@ def get_best_model(api_key):
         return None, None
     genai.configure(api_key=api_key)
     # Niente test a vuoto, usiamo direttamente il modello stabile
-    model_name = 'gemini-1.5-flash'
+    model_name = 'gemini-1.5-flash-latest'
     try:
         m = genai.GenerativeModel(model_name)
         return m, model_name
