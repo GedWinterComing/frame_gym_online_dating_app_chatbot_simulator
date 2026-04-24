@@ -8,15 +8,25 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-# --- 1. CONFIGURAZIONE MOTORE (ZERO CONSUMO ALL'AVVIO) ---
+# --- 1. CONFIGURAZIONE MOTORE (AUTO-DISCOVERY) ---
 @st.cache_resource(show_spinner="Inizializzazione Motore AI...")
 def get_best_model(api_key):
     if not api_key:
         return None, None
+    
     genai.configure(api_key=api_key)
-    # Niente test a vuoto, usiamo direttamente il modello stabile
-    model_name = 'gemini-pro'
+    
     try:
+        # 1. Chiede a Google la lista esatta dei modelli abilitati per la tua API Key
+        modelli_validi = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        
+        if not modelli_validi:
+            return None, None
+            
+        # 2. Cerca in automatico la versione "flash" (la più veloce per le chat). 
+        # Se non la trova, prende il primo modello stabile disponibile.
+        model_name = next((m for m in modelli_validi if 'flash' in m.lower()), modelli_validi[0])
+        
         m = genai.GenerativeModel(model_name)
         return m, model_name
     except Exception:
