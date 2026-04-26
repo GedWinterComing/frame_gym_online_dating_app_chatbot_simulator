@@ -1,86 +1,58 @@
 import streamlit as st
 import google.generativeai as genai
 import os
-import random
+import base64
 from dotenv import load_dotenv
 
-# Caricamento variabili
+# --- CARICAMENTO VARIABILI ---
 load_dotenv()
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-# --- 1. CONFIGURAZIONE MOTORE (AUTO-DISCOVERY) ---
+# --- FUNZIONE MAGICA PER LEGGERE LE IMMAGINI LOCALI ---
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return None
+
+# --- 1. CONFIGURAZIONE MOTORE ---
 @st.cache_resource(show_spinner="Inizializzazione Motore AI...")
 def get_best_model(api_key):
-    if not api_key:
-        return None, None
-    
+    if not api_key: return None, None
     genai.configure(api_key=api_key)
-    
     try:
-        # 1. Chiede a Google la lista esatta dei modelli abilitati per la tua API Key
         modelli_validi = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        
-        if not modelli_validi:
-            return None, None
-            
-        # 2. Cerca in automatico la versione "flash" (la più veloce per le chat). 
-        # Se non la trova, prende il primo modello stabile disponibile.
+        if not modelli_validi: return None, None
         model_name = next((m for m in modelli_validi if 'flash' in m.lower()), modelli_validi[0])
-        
-        m = genai.GenerativeModel(model_name)
-        return m, model_name
+        return genai.GenerativeModel(model_name), model_name
     except Exception:
         return None, None
 
-# --- 2. DIZIONARIO LINGUE ---
+# --- 2. DIZIONARI: INTERFACCIA E LINGUE ---
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox",
+        "title": "⚖️ Social Dynamics Sandbox v2.0",
         "tab_sim": "🎮 Simulatore",
         "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:",
-        "lang": "🌐 Lingua",
         "sex_u": "👤 Il tuo sesso",
-        "sex_p": "❤️ Cerchi un/una",
         "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza",
-        "arch": "🎭 Tuo Archetipo",
         "goth": "🦇 Gothificatore",
-        "dyn": "🎯 Dinamica",
-        "pursuer": "Corteggiatore (Tu seduci)",
-        "desired": "Desiderato (L'IA seduce te)",
+        "mode": "🎲 Modalità di Gioco",
+        "mode_gym": "🏋️ Palestra (Tu ti alleni, l'IA resiste)",
+        "mode_exp": "🍷 Esperienza (L'IA ti seduce, tu reagisci)",
+        "dyn": "🎯 Dinamica (Solo per Palestra)",
+        "pursuer": "Corteggiatore",
+        "desired": "Desiderato",
         "start": "🚀 INIZIA PARTITA",
-        "mood_title": "⚙️ Modifica Umore Partner",
         "back_btn": "⬅️ Termina e Resetta",
-        "coach_title": "🕵️‍♂️ Analizzatore di Frame",
-        "coach_desc": "Incolla una chat vera per analizzare chi ha il potere.",
-        "coach_btn": "🔍 Analizza Chat"
-    },
-    "English": {
-        "title": "⚖️ Social Dynamics Sandbox",
-        "tab_sim": "🎮 Simulator",
-        "tab_coach": "🧠 Coach Room",
-        "setup": "Configure your session:",
-        "lang": "🌐 Language",
-        "sex_u": "👤 Your gender",
-        "sex_p": "❤️ Looking for",
-        "age": "🎂 Your Age",
-        "boy": "Boy", "girl": "Girl",
-        "arch": "🎭 Your Archetype",
-        "goth": "🦇 Gothifier",
-        "dyn": "🎯 Dynamics",
-        "pursuer": "Pursuer (You seduce)",
-        "desired": "Desired (AI seduces you)",
-        "start": "🚀 START SESSION",
-        "mood_title": "⚙️ Adjust Partner's Mood",
-        "back_btn": "⬅️ End & Reset",
-        "coach_title": "🕵️‍♂️ Frame Analyzer",
-        "coach_desc": "Paste a real chat to see who holds the power.",
-        "coach_btn": "🔍 Analyze Chat"
-    },
-    "日本語": { "title": "⚖️ 練習用サンドボックス", "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム", "setup": "設定:", "lang": "🌐 言語", "sex_u": "👤 性別", "sex_p": "❤️ 相手", "age": "🎂 年齢", "boy": "男性", "girl": "女性", "arch": "🎭 タイプ", "goth": "🦇 ゴス", "dyn": "🎯 ダイナミクス", "pursuer": "追う側", "desired": "追われる側", "start": "🚀 開始", "mood_title": "⚙️ 気分調整", "back_btn": "⬅️ 戻る", "coach_title": "🕵️‍♂️ 分析", "coach_desc": "チャットを貼り付けて分析します。", "coach_btn": "🔍 分析する" },
-    "中文": { "title": "⚖️ 社交动态模拟器", "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室", "setup": "配置:", "lang": "🌐 语言", "sex_u": "👤 你的性别", "sex_p": "❤️ 寻找", "age": "🎂 年龄", "boy": "男生", "girl": "女生", "arch": "🎭 原型", "goth": "🦇 哥特", "dyn": "🎯 互动", "pursuer": "主动", "desired": "被动", "start": "🚀 开始", "mood_title": "⚙️ 调整情绪", "back_btn": "⬅️ 返回", "coach_title": "🕵️‍♂️ 分析器", "coach_desc": "粘贴聊天记录进行分析。", "coach_btn": "🔍 开始分析" }
+        "analyze_btn": "🫂 Termina e Chiedi Analisi Psicologica"
+    }
 }
+
+# --- 3. DIZIONARI: ARCHETIPI ---
+ARCH_NAMES = ["Gentle Dom", "The Stoic Sage", "The Detective", "The Chad", "The Average Joe", "The Redpill", "The Data-Driven Geek", "The Conspiracy Theorist", "The Pirate", "The Golden Retriever"]
 
 ARCH_DESC = {
     "Gentle Dom": "👑 Calmo, assertivo e protettivo. Guida la conversazione senza arroganza. Non si giustifica mai.",
@@ -89,144 +61,136 @@ ARCH_DESC = {
     "The Chad": "🗿 Basso sforzo, altissima confidenza. Risposte brevi, dà l'attrazione per scontata.",
     "The Average Joe": "📱 L'utente standard. Usa emoji, cerca un terreno comune e mostra interesse convenzionale.",
     "The Redpill": "💊 Cinico e iper-razionale. Tratta il dating come un mercato darwiniano.",
-    "The Data-Driven Geek": "📊 Analizza il flirt tramite dati o lore tecnica. Metà contabile, metà nerd.",
+    "The Data-Driven Geek": "📊 Analizza il flirt tramite dati. Metà contabile impazzito, metà nerd da D&D.",
     "The Conspiracy Theorist": "👽 Paranoico. Sospetta che il match sia un bot governativo o un rettiliano.",
     "The Pirate": "🏴‍☠️ Arrr! Parla come un bucaniere del 1700 alla ricerca di un tesoro.",
     "The Golden Retriever": "🐶 Energia felice. Eccessivamente entusiasta, 'zerbino' totale."
 }
 
-# --- 3. SETUP PAGINA E CSS DINAMICO ---
+# --- 4. SETUP PAGINA E CSS DINAMICO ---
 st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
 
-# Iniezione CSS Oscuro se il Gothificatore è attivo
-if "goth_mode" not in st.session_state:
-    st.session_state.goth_mode = False
+if "goth_active" not in st.session_state: st.session_state.goth_active = False
+if "archetipo_scelto" not in st.session_state: st.session_state.archetipo_scelto = None
+if "sesso_partner" not in st.session_state: st.session_state.sesso_partner = "Ragazza" # Default
 
-if st.session_state.goth_mode:
-    st.markdown("""
-        <style>
-        /* Sfondo e testo generale */
-        [data-testid="stAppViewContainer"] {
-            background-color: #0a0a0a !important;
-            color: #e0e0e0 !important;
-        }
-        [data-testid="stHeader"] { background-color: #0a0a0a !important; }
-        
-        /* Modifica colori scritte e titoli */
-        h1, h2, h3, p, span, div { color: #e0e0e0 !important; }
-        
-        /* I box informativi diventano viola/rossi molto scuri */
-        div[data-testid="stMenu"] { background-color: #1a001a !important; }
-        
-        /* Le chat dell'AI */
-        [data-testid="stChatMessage"] {
-            background-color: #121212 !important;
-            border-left: 3px solid #8b0000 !important; /* Rosso Sangue */
-        }
-        /* Casella di input */
-        [data-testid="stChatInput"] textarea {
-            background-color: #1c1c1c !important;
-            color: #ffffff !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+# CSS PER GOTH MODE E CAROSELLO TEKKEN
+st.markdown("""
+    <style>
+    /* CSS GOTH (Si attiva solo se necessario) */
+    .goth-mode [data-testid="stAppViewContainer"] { background-color: #0a0a0a !important; color: #e0e0e0 !important; }
+    .goth-mode [data-testid="stHeader"] { background-color: #0a0a0a !important; }
+    .goth-mode [data-testid="stChatMessage"] { background-color: #121212 !important; border-left: 3px solid #8b0000 !important; }
+    .goth-mode [data-testid="stChatInput"] textarea { background-color: #1c1c1c !important; color: #ffffff !important; font-size: 18px !important; font-weight: 600 !important; caret-color: #ff4b4b !important; }
+    
+    /* CSS CAROSELLO STILE VIDEOGIOCO */
+    .roster-container { display: flex; overflow-x: auto; gap: 15px; padding: 20px 0px; scrollbar-width: thin; scrollbar-color: #8b0000 #1a1a1a; }
+    .character-card { position: relative; flex: 0 0 auto; width: 140px; height: 140px; border-radius: 50%; background-size: cover; background-position: center; box-shadow: inset 0 0 20px #000000, 0 0 15px rgba(0,0,0,0.8); transition: transform 0.3s ease, border 0.3s ease; cursor: pointer; border: 2px solid #555; mask-image: radial-gradient(circle, black 50%, rgba(0,0,0,0.2) 90%, transparent 100%); -webkit-mask-image: -webkit-radial-gradient(circle, black 50%, rgba(0,0,0,0.2) 90%, transparent 100%); }
+    .character-card:hover { transform: scale(1.15); border: 2px solid #ff4b4b; z-index: 10; }
+    .card-title { font-size: 12px; margin-top: 8px; text-align: center; color: gray; font-weight: bold;}
+    .selected-card { border: 3px solid #00ff00 !important; transform: scale(1.10); box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+    </style>
+""", unsafe_allow_html=True)
+
+if st.session_state.goth_active:
+    st.markdown('<div class="goth-mode"></div>', unsafe_allow_html=True)
 
 model, active_model_name = get_best_model(api_key)
 if not model:
-    st.error("🚨 API Key mancante o Server Gemini offline. Controlla i Secrets.")
+    st.error("🚨 API Key mancante o Token esauriti.")
     st.stop()
 
-lang_choice = st.selectbox("🌐 Seleziona Lingua", list(UI.keys()), index=0)
-t = UI[lang_choice]
-
+# --- 5. LOGICA INTERFACCIA ---
+t = UI["Italiano"]
 tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 
 if "ui_messages" not in st.session_state:
     st.session_state.ui_messages = []
     st.session_state.gemini_history = []
-    st.session_state.is_easter_egg = False
+    st.session_state.show_report = False
 
-# ==========================================
-# SCHEDA 1: SIMULATORE
-# ==========================================
 with tab_sim:
     if not st.session_state.ui_messages:
         st.title(t["title"])
         st.write(t["setup"])
+        
         col1, col2 = st.columns(2)
         with col1:
             sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
             eta_u = st.slider(t["age"], 18, 40, 33)
-            dinamica = st.radio(t["dyn"], [t["pursuer"], t["desired"]])
-        with col2:
-            archetipo_scelto = st.selectbox(t["arch"], list(ARCH_DESC.keys()), index=0)
-            st.info(ARCH_DESC[archetipo_scelto])
-            sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
-            goth_toggle = st.toggle(t["goth"], value=False)
+            modalita = st.radio(t["mode"], [t["mode_gym"], t["mode_exp"]])
+            if modalita == t["mode_gym"]:
+                dinamica = st.radio(t["dyn"], [t["pursuer"], t["desired"]])
+            else: dinamica = "Esperienza"
         
-        if st.button(t["start"], use_container_width=True, type="primary"):
-            st.session_state.archetipo_scelto = archetipo_scelto
-            st.session_state.goth_mode = goth_toggle # SALVA IL MOOD GOTICO
-            st.session_state.strana, st.session_state.banale, st.session_state.entusiasta = 5, 25, 10
+        with col2:
+            st.session_state.sesso_partner = st.selectbox("Sesso del Partner (Archetipo)", [t["girl"], t["boy"]])
+            goth_toggle = st.toggle(t["goth"], value=False)
             
-            # Logica Easter Egg
-            easter_egg_triggered = False
-            if sesso_u == t["girl"] and sesso_p == t["boy"] and dinamica == t["desired"]:
-                prob = 0.034 * (1.992 if goth_toggle else 1)
-                if random.random() < prob:
-                    easter_egg_triggered = True
-                    st.session_state.is_easter_egg = True
-            
-            if easter_egg_triggered:
-                full_prompt = st.secrets.get("GABRI_LORE", "Lore non trovata.") + "\nFORMATO: [MOOD]: ... [MESSAGGIO]: ..."
-            else:
-                try:
-                    with open("prompt.txt", "r", encoding="utf-8") as f:
-                        template = f.read()
-                    full_prompt = template.format(lingua=lang_choice, sesso_utente=sesso_u, archetipo=archetipo_scelto, sesso_partner=sesso_p)
-                except FileNotFoundError:
-                    st.error("Manca il file prompt.txt")
-                    st.stop()
+        # --- IL SELETTORE TEKKEN ---
+        st.markdown("### Seleziona il tuo Combattente")
+        cartella = "femmine" if st.session_state.sesso_partner == t["girl"] else "maschi"
+        
+        st.markdown('<div class="roster-container">', unsafe_allow_html=True)
+        cols = st.columns(len(ARCH_NAMES))
+        
+        for i, arch in enumerate(ARCH_NAMES):
+            with cols[i]:
+                # Cerca l'immagine .png locale
+                b64_img = get_base64_image(f"assets/{cartella}/{arch}.png")
                 
-                # INIEZIONE GOTICA REALE
-                if goth_toggle:
-                    full_prompt += """
-                    \n[MODALITÀ GOTICA ATTIVA]:
-                    Il partner che devi simulare appartiene alla subcultura Goth.
-                    - PROBABILITÀ PROFILO: Genera con il 70% di probabilità un Classic/Trad Goth. Altrimenti, scegli uno tra questi: Victorian/Romantic Goth, Industrial Goth, Cyber Goth, Gothabilly, Lolita Goth, Nu-Goth.
-                    - ESTETICA TESTUALE: Usa occasionalmente la formattazione HTML per colorare singole parole chiave nel messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori tipici dei capelli alternativi: magenta, cyan, limegreen o darkred. Usa molto il *corsivo* per dare un tono drammatico.
-                    """
-
-                if dinamica == t["desired"]:
-                    full_prompt += "\n[DINAMICA]: L'utente è il Desiderato. Tu (IA) devi sedurlo. Inizia tu la chat."
+                if b64_img:
+                    # Se clicchi il bottone, salva la selezione
+                    if st.button("Scegli", key=f"btn_{arch}"):
+                        st.session_state.archetipo_scelto = arch
+                    
+                    # Highlight se selezionato
+                    border_class = "selected-card" if st.session_state.archetipo_scelto == arch else ""
+                    
+                    html = f'''
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="character-card {border_class}" style="background-image: url('data:image/png;base64,{b64_img}');"></div>
+                        <p class="card-title">{arch}</p>
+                    </div>
+                    '''
+                    st.markdown(html, unsafe_allow_html=True)
                 else:
-                    full_prompt += "\n[DINAMICA]: L'utente è il Corteggiatore. Tu (IA) sei diffidente."
+                    st.warning(f"Manca: {arch}.png")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-            chat = model.start_chat(history=[])
-            response = chat.send_message(full_prompt)
-            st.session_state.ui_messages.append({"role": "assistant", "content": response.text})
-            st.session_state.gemini_history = chat.history
-            st.rerun()
+        # Mostra la descrizione se hai selezionato qualcuno
+        if st.session_state.archetipo_scelto:
+            st.info(f"**Hai selezionato {st.session_state.archetipo_scelto}:** {ARCH_DESC[st.session_state.archetipo_scelto]}")
+            
+            if st.button(t["start"], use_container_width=True, type="primary"):
+                st.session_state.goth_active = goth_toggle 
+                st.session_state.modalita_attiva = modalita
+                
+                if modalita == t["mode_gym"]:
+                    full_prompt = f"L'utente si allena come {st.session_state.archetipo_scelto}. Tu sei il partner ({st.session_state.sesso_partner}) e fai molta resistenza."
+                    if dinamica == t["desired"]: full_prompt += "\n[DINAMICA]: L'utente è il Desiderato. Tu devi sedurlo. Inizia tu."
+                else:
+                    full_prompt = f"Da questo momento TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {ARCH_DESC[st.session_state.archetipo_scelto]}. Inizia tu a sedurre l'utente."
+                
+                if goth_toggle: full_prompt += "\n[MODALITÀ GOTICA ATTIVA]"
+
+                chat = model.start_chat(history=[])
+                response = chat.send_message(full_prompt)
+                st.session_state.ui_messages.append({"role": "assistant", "content": response.text})
+                st.session_state.gemini_history = chat.history
+                st.rerun()
+        else:
+            st.warning("☝️ Seleziona un archetipo dal carosello per poter avviare la partita!")
 
     else:
-        # Chat Attiva
-        titolo_c = "🦇 Goth Mode: ON" if st.session_state.goth_mode else f"⚖️ Frame-Gym: {st.session_state.archetipo_scelto}"
-        if st.session_state.is_easter_egg: titolo_c = "⚖️ Easter Egg: Gabri Found!"
-        
-        st.subheader(titolo_c)
-        
+        # SCHERMATA CHAT
+        st.subheader(f"{'🍷 Esperienza' if st.session_state.modalita_attiva == t['mode_exp'] else '⚖️ Frame-Gym'}: {st.session_state.archetipo_scelto}")
         if st.button(t["back_btn"]):
             st.session_state.clear()
             st.rerun()
 
         for msg in st.session_state.ui_messages:
-            with st.chat_message(msg["role"]):
-                if "[MOOD]:" in msg["content"]:
-                    parti = msg["content"].split("[MESSAGGIO]:")
-                    st.markdown(f"*{parti[0].replace('[MOOD]:','').strip()}*")
-                    # L'uso di unsafe_allow_html=True qui permette alle scritte colorate di funzionare!
-                    st.markdown(f"📱 **{parti[1].strip()}**", unsafe_allow_html=True)
-                else: st.markdown(msg["content"], unsafe_allow_html=True)
+            with st.chat_message(msg["role"]): st.markdown(msg["content"])
 
         if prompt := st.chat_input("Scrivi..."):
             st.session_state.ui_messages.append({"role": "user", "content": prompt})
@@ -238,34 +202,5 @@ with tab_sim:
                 st.session_state.gemini_history = chat.history
                 st.rerun()
 
-# ==========================================
-# SCHEDA 2: COACH ROOM
-# ==========================================
 with tab_coach:
-    st.title(t["coach_title"])
-    st.write(t["coach_desc"])
-    chat_input = st.text_area("Chat:", height=250, placeholder="Io: ...\nLei: ...")
-    if st.button(t["coach_btn"], type="primary"):
-        if chat_input:
-            with st.spinner("Analisi in corso..."):
-                res = model.generate_content(f"Analizza il frame di questa chat in modo spietato e clinico e fornisci un esempio di come l'utente avrebbe dovuto rispondere per mantenere il frame e poi scrivi una Chat da Maestro ovvero prosegui la simulazione per 9 botta e risposta ideali mostrando come un vero maestro avrebbe gestito e ribaltato la situazione:\n{chat_input}")
-                st.markdown(res.text)
-# --- 1. FALLBACK MODELLI (ROULETTE CASUALE) ---
-# @st.cache_resource(show_spinner="Ricerca di un server Gemini disponibile...")
-# def get_best_model(api_key):
-#     if not api_key:
-#         return None, None
-#     genai.configure(api_key=api_key)
-#     # Lista modelli per la roulette
-#     models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
-#     random.shuffle(models)
-    
-#     for model_name in models:
-#         try:
-#             m = genai.GenerativeModel(model_name)
-#             # Test rapido per verificare la quota
-#             m.generate_content("ping") 
-#             return m, model_name
-#         except Exception:
-#             continue
-#     return None, None
+    st.write("Area in manutenzione per i prossimi aggiornamenti!")
