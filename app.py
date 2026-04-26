@@ -79,32 +79,42 @@ if "goth_active" not in st.session_state: st.session_state.goth_active = False
 if "roster_idx" not in st.session_state: st.session_state.roster_idx = 0
 if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 
-# CSS POTENZIATO
-st.markdown(f"""
+# CSS GLOBALE (Sempre attivo, gestisce l'anello e fissa i blocchi di testo troncati)
+st.markdown("""
     <style>
-    /* TEMA DARK E GOTH */
-    {'.goth-mode' if st.session_state.goth_active else ''} [data-testid="stAppViewContainer"] {{ background-color: #0a0a0a !important; color: #e0e0e0 !important; }}
-    {'.goth-mode' if st.session_state.goth_active else ''} [data-testid="stHeader"] {{ background-color: #0a0a0a !important; }}
-    
-    /* FIX CURSORE E INPUT */
-    textarea, input {{ 
-        caret-color: {'#ff4b4b' if st.session_state.goth_active else '#000'} !important; 
-    }}
-    
     /* FIX TESTO TRONCATO NEI REPORT */
-    [data-testid="stInfo"], .stAlert {{ 
+    [data-testid="stInfo"], .stAlert { 
         overflow-y: auto !important; 
         max-height: 600px !important; 
-    }}
+    }
 
     /* ANELLO PROSPETTICO */
-    .ring-container {{ display: flex; justify-content: center; align-items: center; gap: 20px; margin: 30px 0; }}
-    .ring-side {{ width: 100px; height: 100px; border-radius: 50%; opacity: 0.3; filter: grayscale(100%); background-size: cover; background-position: center; border: 2px solid #444; }}
-    .ring-center {{ width: 200px; height: 200px; border-radius: 50%; background-size: cover; background-position: center; border: 4px solid #ff4b4b; box-shadow: 0 0 30px rgba(255, 75, 75, 0.4); z-index: 10; }}
+    .ring-container { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 30px 0; }
+    .ring-side { width: 100px; height: 100px; border-radius: 50%; opacity: 0.3; filter: grayscale(100%); background-size: cover; background-position: center; border: 2px solid #444; }
+    .ring-center { width: 200px; height: 200px; border-radius: 50%; background-size: cover; background-position: center; border: 4px solid #ff4b4b; box-shadow: 0 0 30px rgba(255, 75, 75, 0.4); z-index: 10; }
     </style>
 """, unsafe_allow_html=True)
 
-if st.session_state.goth_active: st.markdown('<div class="goth-mode"></div>', unsafe_allow_html=True)
+# CSS GOTH (Iniettato SOLO se la modalità oscura è attiva)
+if st.session_state.goth_active:
+    st.markdown("""
+        <style>
+        /* TEMA DARK E GOTH */
+        [data-testid="stAppViewContainer"] { background-color: #0a0a0a !important; color: #e0e0e0 !important; }
+        [data-testid="stHeader"] { background-color: #0a0a0a !important; }
+        [data-testid="stChatMessage"] { background-color: #121212 !important; border-left: 3px solid #8b0000 !important; }
+        h1, h2, h3, p, span, div, label { color: #e0e0e0 !important; }
+        
+        /* FIX CURSORE E INPUT (Testo più grande, cursore rosso) */
+        textarea, input, [data-testid="stChatInputTextArea"] { 
+            background-color: #1c1c1c !important; 
+            color: #ffffff !important; 
+            font-size: 18px !important; 
+            font-weight: 600 !important; 
+            caret-color: #ff4b4b !important; 
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
 model, _ = get_best_model(api_key)
 
@@ -143,25 +153,37 @@ with tab_sim:
                     <div class="ring-side" style="background-image: url('data:image/png;base64,{imgs[2]}');"></div>
                 </div>
                 <h2 style="text-align: center; color: #ff4b4b;">{names[1]}</h2>
-                <p style="text-align: center; font-style: italic;">{ARCH_DESC[names[1]]}</p>
+                <p style="text-align: center; font-style: italic; color: gray;">{ARCH_DESC[names[1]]}</p>
             ''', unsafe_allow_html=True)
             
             c1, c2, c3 = st.columns([1,2,1])
-            if c1.button("⬅️ Precedente"): 
+            if c1.button("⬅️ Precedente", use_container_width=True): 
                 st.session_state.roster_idx = (idx - 1) % 10
                 st.rerun()
-            if c3.button("Successivo ➡️"): 
+            if c3.button("Successivo ➡️", use_container_width=True): 
                 st.session_state.roster_idx = (idx + 1) % 10
                 st.rerun()
             
-            if c2.button(t["start"], type="primary", use_container_width=True):
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            if st.button(t["start"], type="primary", use_container_width=True):
                 st.session_state.goth_active = goth_toggle
                 st.session_state.modalita_attiva = modalita
                 st.session_state.archetipo_scelto = names[1]
                 
                 # Generazione Prompt
-                prompt_init = f"Sei {names[1]}. {ARCH_DESC[names[1]]}. Partner: {sesso_p}. Utente: {sesso_u} ({eta_u} anni). Modalità: {modalita}."
-                if goth_toggle: prompt_init += " [MODALITÀ GOTICA ATTIVA]"
+                if modalita == t["mode_gym"]:
+                    try:
+                        with open("prompt.txt", "r", encoding="utf-8") as f:
+                            template = f.read()
+                        prompt_init = template.format(lingua="Italiano", sesso_utente=sesso_u, archetipo=names[1], sesso_partner=sesso_p)
+                    except FileNotFoundError:
+                        prompt_init = f"L'utente si allena come {names[1]}. Tu sei il partner ({sesso_p}) e fai molta resistenza."
+                    if dinamica == t["desired"]: prompt_init += "\n[DINAMICA]: L'utente è il Desiderato. Tu devi sedurlo. Inizia tu."
+                else:
+                    prompt_init = f"Da questo momento TU sei l'archetipo: '{names[1]}'. Descrizione: {ARCH_DESC[names[1]]}. Inizia tu a sedurre l'utente applicando rigorosamente il tuo archetipo."
+                
+                if goth_toggle: prompt_init += "\n[MODALITÀ GOTICA ATTIVA]"
                 
                 chat = model.start_chat(history=[])
                 res = chat.send_message(prompt_init)
@@ -170,21 +192,40 @@ with tab_sim:
                 st.rerun()
         else:
             st.warning("⚠️ Immagini non trovate in assets/. Verifica che siano .png e che i nomi siano corretti.")
-            # Debug per te
-            if st.checkbox("Mostra Debug Percorsi"):
-                st.write(f"Cerco in: assets/{cartella}/")
-                st.write(f"File corrente: {names[1]}.png")
 
     else:
         # AREA CHAT
-        st.subheader(f"Partita contro: {st.session_state.archetipo_scelto}")
-        if st.button("⬅️ Esci"):
-            st.session_state.ui_messages = []
-            st.session_state.goth_active = False
-            st.rerun()
+        st.subheader(f"{'🍷 Esperienza' if st.session_state.modalita_attiva == t['mode_exp'] else '⚖️ Frame-Gym'} contro: {st.session_state.archetipo_scelto}")
+        
+        col_btn1, col_btn2 = st.columns(2)
+        with col_btn1:
+            if st.button("⬅️ Termina e Resetta", use_container_width=True):
+                st.session_state.ui_messages = []
+                st.session_state.goth_active = False
+                st.rerun()
+        with col_btn2:
+            if st.session_state.modalita_attiva == t["mode_exp"]:
+                if st.button("🫂 Analisi Psicologica", use_container_width=True, type="secondary"):
+                    st.session_state.show_report = True
+                    
+        if st.session_state.show_report:
+            st.markdown("---")
+            st.markdown("### 🫂 Il Profiler Emotivo")
+            with st.spinner("Sto analizzando le tue vulnerabilità..."):
+                storia_chat = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state.ui_messages])
+                prompt_report = f"Analizza questa chat come uno psicologo relazionale empatico. CHAT:\n{storia_chat}"
+                res_report = model.generate_content(prompt_report)
+                st.info(res_report.text)
+            st.markdown("---")
             
         for m in st.session_state.ui_messages:
-            with st.chat_message(m["role"]): st.markdown(m["content"])
+            with st.chat_message(m["role"]): 
+                if "[MOOD]:" in m["content"]:
+                    parti = m["content"].split("[MESSAGGIO]:")
+                    st.markdown(f"*{parti[0].replace('[MOOD]:','').strip()}*")
+                    if len(parti) > 1: st.markdown(f"📱 **{parti[1].strip()}**", unsafe_allow_html=True)
+                else:
+                    st.markdown(m["content"])
             
         if p := st.chat_input("Digita qui..."):
             st.session_state.ui_messages.append({"role": "user", "content": p})
@@ -197,7 +238,8 @@ with tab_sim:
 
 with tab_coach:
     st.title(t["coach_title"])
-    c_input = st.text_area("Incolla qui la tua chat...")
-    if st.button("Analizza Frame"):
-        res = model.generate_content(f"Analizza il frame di questa chat e offri 9 scambi da maestro: {c_input}")
-        st.info(res.text)
+    c_input = st.text_area("Incolla qui la tua chat vera...")
+    if st.button("Analizza Frame", type="primary"):
+        with st.spinner("L'Arbitro sta analizzando i Frame..."):
+            res = model.generate_content(f"Sei l'Arbitro. Analizza spietatamente questa chat indicando il Frame, il punteggio da 0 a 10, e 3 opzioni di 'Risposta da Maestro'. CHAT:\n<chat>{c_input}</chat>")
+            st.markdown(res.text)
