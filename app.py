@@ -35,7 +35,7 @@ def get_best_model(api_key):
 # --- 2. DIZIONARI MULTILINGUA ---
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v3.0",
+        "title": "⚖️ Social Dynamics Sandbox v3.1",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -49,7 +49,7 @@ UI = {
         "coach_btn": "Analizza Frame"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v3.0",
+        "title": "⚖️ Social Dynamics Sandbox v3.1",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -63,7 +63,7 @@ UI = {
         "coach_btn": "Analyze Frame"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v3.0",
+        "title": "⚖️ 社交动态沙盒 v3.1",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -77,7 +77,7 @@ UI = {
         "coach_btn": "分析框架"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v3.0",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v3.1",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -92,57 +92,57 @@ UI = {
     }
 }
 
-# I NOMI DEGLI ARCHETIPI RESTANO IN INGLESE PER I FILE IMMAGINE
-ARCH_NAMES = ["Gentle Dom", "The Stoic Sage", "The Detective", "The Chad", "The Average Joe", "The Redpill", "The Data-Driven Geek", "The Conspiracy Theorist", "The Pirate", "The Golden Retriever"]
+# NUOVO ORDINE: Average Joe è il primo (Indice 0), Nome del Geek modificato
+ARCH_NAMES = ["The Average Joe", "Gentle Dom", "The Stoic Sage", "The Detective", "The Chad", "The Redpill", "The Data-Driven Geek and Nerd", "The Conspiracy Theorist", "The Pirate", "The Golden Retriever"]
 
 ARCH_DESC = {
     "Italiano": {
+        "The Average Joe": "📱 L'utente standard. Cerca un terreno comune.",
         "Gentle Dom": "👑 Calmo, assertivo e protettivo. Guida senza arroganza.",
         "The Stoic Sage": "🧘‍♂️ Imperturbabile e riflessivo. Risponde con logica.",
         "The Detective": "🕵️‍♂️ Misterioso e analitico. Rifiuta di parlare di sé.",
         "The Chad": "🗿 Basso sforzo, altissima confidenza. Dà l'attrazione per scontata.",
-        "The Average Joe": "📱 L'utente standard. Cerca un terreno comune.",
         "The Redpill": "💊 Cinico e iper-razionale. Dating come mercato darwiniano.",
-        "The Data-Driven Geek": "📊 Metà impiegato, metà nerd da D&D. Analizza tutto.",
+        "The Data-Driven Geek and Nerd": "📊 Metà impiegato, metà nerd da D&D. Analizza tutto.",
         "The Conspiracy Theorist": "👽 Paranoico. Sospetta complotti governativi ovunque.",
         "The Pirate": "🏴‍☠️ Arrr! In cerca di tesori e avventure spericolate.",
-        "The Golden Retriever": "🐶 Energia felice. Entusiasta e ingenuo."
+        "The Golden Retriever": "🐶 Pura energia e felicità. Entusiasta e ingenuo."
     },
     "English": {
+        "The Average Joe": "📱 The standard user. Looks for common ground.",
         "Gentle Dom": "👑 Calm, assertive, and protective. Leads without arrogance.",
         "The Stoic Sage": "🧘‍♂️ Unflappable and reflective. Responds with logic.",
         "The Detective": "🕵️‍♂️ Mysterious and analytical. Refuses to talk about themselves.",
         "The Chad": "🗿 Low effort, extremely high confidence. Takes attraction for granted.",
-        "The Average Joe": "📱 The standard user. Looks for common ground.",
         "The Redpill": "💊 Cynical and hyper-rational. Treats dating like a Darwinian market.",
-        "The Data-Driven Geek": "📊 Half office worker, half D&D nerd. Analyzes everything.",
+        "The Data-Driven Geek and Nerd": "📊 Half office worker, half D&D nerd. Analyzes everything.",
         "The Conspiracy Theorist": "👽 Paranoid. Suspects government plots everywhere.",
         "The Pirate": "🏴‍☠️ Arrr! Looking for treasure and reckless adventures.",
-        "The Golden Retriever": "🐶 Happy energy. Enthusiastic and naive."
+        "The Golden Retriever": "🐶 Pure energy and happiness. Enthusiastic and naive."
     },
     "中文": {
+        "The Average Joe": "📱 标准用户。寻找共同话题。",
         "Gentle Dom": "👑 冷静、自信且具有保护欲。没有傲慢地引导对话。",
         "The Stoic Sage": "🧘‍♂️ 处变不惊，善于反思。用逻辑回应。",
         "The Detective": "🕵️‍♂️ 神秘且善于分析。拒绝谈论自己。",
         "The Chad": "🗿 低投入，极度自信。认为吸引力理所当然。",
-        "The Average Joe": "📱 标准用户。寻找共同话题。",
         "The Redpill": "💊 愤世嫉俗且极其理性。将约会视为达尔文式的市场。",
-        "The Data-Driven Geek": "📊 一半是上班族，一半是D&D书呆子。分析一切。",
+        "The Data-Driven Geek and Nerd": "📊 一半是上班族，一半是D&D书呆子。分析一切。",
         "The Conspiracy Theorist": "👽 偏执狂。怀疑到处都是政府阴谋。",
         "The Pirate": "🏴‍☠️ 呀哈！寻找宝藏和鲁莽的冒险。",
-        "The Golden Retriever": "🐶 充满快乐的能量。热情又天真。"
+        "The Golden Retriever": "🐶 纯粹的能量和幸福。热情又天真。"
     },
     "日本語": {
+        "The Average Joe": "📱 標準的なユーザー。共通の話題を探す。",
         "Gentle Dom": "👑 穏やかで、断固としており、保護的。傲慢さなしにリードする。",
         "The Stoic Sage": "🧘‍♂️ 動じず、思慮深い。論理で応答する。",
         "The Detective": "🕵️‍♂️ ミステリアスで分析的。自分自身について話すことを拒否する。",
         "The Chad": "🗿 努力をせず、非常に高い自信を持つ。惹きつけるのは当然だと考えている。",
-        "The Average Joe": "📱 標準的なユーザー。共通の話題を探す。",
         "The Redpill": "💊 皮肉屋で超合理的。デートをダーウィン的市場として扱う。",
-        "The Data-Driven Geek": "📊 半分は会社員、半分はD&Dオタク。すべてを分析する。",
+        "The Data-Driven Geek and Nerd": "📊 半分は会社員、半分はD&Dオタク。すべてを分析する。",
         "The Conspiracy Theorist": "👽 偏執的。どこにでも政府の陰謀があると疑う。",
         "The Pirate": "🏴‍☠️ ヨーホー！宝物と無謀な冒険を探している。",
-        "The Golden Retriever": "🐶 ハッピーなエネルギー。熱狂的で無邪気。"
+        "The Golden Retriever": "🐶 純粋なエネルギーと幸福。熱狂的で無邪気。"
     }
 }
 
@@ -150,7 +150,8 @@ ARCH_DESC = {
 st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
 
 if "goth_active" not in st.session_state: st.session_state.goth_active = False
-if "roster_idx" not in st.session_state: st.session_state.roster_idx = 0
+if "roster_idx" not in st.session_state: st.session_state.roster_idx = 0 # 0 = The Average Joe
+if "archetipo_scelto" not in st.session_state: st.session_state.archetipo_scelto = "Gentle Dom" # Default pre-bloccato
 if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
 
@@ -176,8 +177,8 @@ if st.session_state.goth_active:
 
 model, _ = get_best_model(api_key)
 
-# --- SELETTORE LINGUA GLOBALE ---
-lang_options = ["Italiano", "English", "中文", "日本語"]
+# --- SELETTORE LINGUA: Inglese è primo nella lista, ma Italiano è forzato come default logico ---
+lang_options = ["English", "Italiano", "中文", "日本語"]
 st.session_state.lang_choice = st.selectbox("🌐 Lingua / Language / 语言 / 言語", lang_options, index=lang_options.index(st.session_state.lang_choice))
 t = UI[st.session_state.lang_choice]
 desc = ARCH_DESC[st.session_state.lang_choice]
@@ -222,30 +223,38 @@ with tab_sim:
             if c1.button(t["prev"], use_container_width=True): 
                 st.session_state.roster_idx = (idx - 1) % 10
                 st.rerun()
+                
+            with c2:
+                # Pulsante per confermare la scelta visiva attuale
+                if st.button(f"Scegli {names[1]}", type="secondary", use_container_width=True):
+                    st.session_state.archetipo_scelto = names[1]
+                    
             if c3.button(t["next"], use_container_width=True): 
                 st.session_state.roster_idx = (idx + 1) % 10
                 st.rerun()
             
             st.markdown("<br>", unsafe_allow_html=True)
             
+            # Mostra chi è bloccato e pronto a partire
+            st.success(f"🔒 Personaggio bloccato e pronto: **{st.session_state.archetipo_scelto}**")
+            
             if st.button(t["start"], type="primary", use_container_width=True):
                 st.session_state.goth_active = goth_toggle
                 st.session_state.modalita_attiva = modalita
-                st.session_state.archetipo_scelto = names[1]
                 
-                # Generazione Prompt: Diciamo all'IA in che lingua deve parlare
+                # Generazione Prompt
                 base_instruction = f"IMPORTANT: You MUST speak exclusively in {st.session_state.lang_choice}.\n"
                 
                 if modalita == t["mode_gym"]:
                     try:
                         with open("prompt.txt", "r", encoding="utf-8") as f:
                             template = f.read()
-                        prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, archetipo=names[1], sesso_partner=sesso_p)
+                        prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, archetipo=st.session_state.archetipo_scelto, sesso_partner=sesso_p)
                     except FileNotFoundError:
-                        prompt_init = base_instruction + f"L'utente si allena come {names[1]}. Tu sei il partner ({sesso_p}) e fai molta resistenza."
+                        prompt_init = base_instruction + f"L'utente si allena come {st.session_state.archetipo_scelto}. Tu sei il partner ({sesso_p}) e fai molta resistenza."
                     if dinamica == t["desired"]: prompt_init += f"\n[DINAMICA]: L'utente è il Desiderato. Tu devi sedurlo in {st.session_state.lang_choice}. Inizia tu."
                 else:
-                    prompt_init = base_instruction + f"Da questo momento TU sei l'archetipo: '{names[1]}'. Descrizione: {desc[names[1]]}. Inizia tu a sedurre l'utente applicando rigorosamente il tuo archetipo, parlando in {st.session_state.lang_choice}."
+                    prompt_init = base_instruction + f"Da questo momento TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu a sedurre l'utente applicando rigorosamente il tuo archetipo, parlando in {st.session_state.lang_choice}."
                 
                 if goth_toggle: prompt_init += "\n[MODALITÀ GOTICA ATTIVA]"
                 
@@ -283,7 +292,7 @@ with tab_sim:
         for m in st.session_state.ui_messages:
             with st.chat_message(m["role"]): 
                 if "[MOOD]:" in m["content"] or "[状态]:" in m["content"] or "[気分]:" in m["content"]:
-                    st.markdown(m["content"]) # Il parse complesso su multilingua è rischioso, stampiamo intero.
+                    st.markdown(m["content"]) 
                 else:
                     st.markdown(m["content"])
             
