@@ -3,24 +3,38 @@ import google.generativeai as genai
 import os
 import base64
 import random
+import pandas as pd
+import altair as alt
 from dotenv import load_dotenv
 
 # --- CARICAMENTO VARIABILI E GESTIONE LOCALE/CLOUD ---
 load_dotenv()
 
-# 1. Recupero API KEY (Cloud vs Locale)
 try:
     api_key = st.secrets["GEMINI_API_KEY"]
 except (KeyError, FileNotFoundError):
     api_key = os.getenv("GEMINI_API_KEY")
 
-# Recupero Lore (Cloud vs Locale)
+GABRI_LORE_LOCALE = """
+Sei 'Gabri', 34 anni, capelli biondi, hai fatto il liceo classico, laureato in Fisica Applicata, Data Scientist a Bologna. Sei un Easter Egg. L'utente è una ragazza.
+LORE:
+- Hai l'ADHD: questo ti rende a volte iper-focalizzato, entusiasta e saltelli tra i discorsi.
+- Personalità: sei calmo, riflessivo, dolce, gentile, nerd, introverso, INFJ, ami chiacchierate profonde a 2 a 2 piuttosto che gruppi di amici vasti, ti perdi nei discorsi generali sui massimi sistemi. Ti piace One Piece e i manga giapponesi, la musica celtica, porti capelli lunghi con un taglio mullet/moicano rasato ai lati, orecchini nel sx.
+- Ragazza ideale: capelli neri o mora o colorati (rosa o blu o verdi ecc), dolce, meglio se tatuata, gotica.
+- Musica: Suoni la chitarra elettrica. Adori Steve Vai, Joe Satriani, Iron Maiden, Pearl Jam, metal anni 80, musica rock.
+- Segreto ironico: Nonostante ami i virtuosi melodici, non hai MAI imparato un brano dall'inizio alla fine (tipico ADHD).
+- Altri tratti: Apparecchi acustici, mediti (sei Buddhista), sei Comunista/Socialista. 
+- Cani: Ami i cani ma non ne hai. In una foto compare Lara, cane di amici. Sogni Noam (Malamute femmina grigia e bianca) e Chomsky (Chow Chow maschio miele o nero).
+- Stile: Scrivi con MOLTA punteggiatura, specialmente virgole. NO abbreviazioni.
+- Sessualità: Dominante nel privato (BDSM e sesso spinto), fuori tranquillo. Etero. Gentle Dom.
+- Obiettivo: Seduci l'utente iniziando tu la chat. L'utente si chiama {nome_utente}.
+"""
+
 try:
     gabri_lore = st.secrets["GABRI_LORE"]
 except (KeyError, FileNotFoundError):
     gabri_lore = GABRI_LORE_LOCALE
 
-# --- FUNZIONE PER LEGGERE LE IMMAGINI LOCALI ---
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         try:
@@ -30,7 +44,6 @@ def get_base64_image(image_path):
             return None
     return None
 
-# --- 1. CONFIGURAZIONE MOTORE ---
 @st.cache_resource(show_spinner="Inizializzazione Motore AI / Initializing AI...")
 def get_best_model(api_key):
     if not api_key: return None, None
@@ -44,71 +57,78 @@ def get_best_model(api_key):
     except Exception:
         return None, None
 
-# --- 2. DIZIONARI MULTILINGUA ---
+# --- DIZIONARIO NOMI DINAMICI ---
+DEFAULT_NAMES = {
+    "Italiano": {"boy": "Marco", "girl": "Giulia"},
+    "English": {"boy": "John", "girl": "Emma"},
+    "中文": {"boy": "Wei", "girl": "Jing"},
+    "日本語": {"boy": "Ken", "girl": "Sakura"}
+}
+
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.4",
+        "title": "⚖️ Social Dynamics Sandbox v4.5",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
-        "mode": "🎲 Modalità di Gioco", "mode_gym": "🏋️ Palestra (Tu sei l'Archetipo)", "mode_exp": "🍷 Esperienza (Sfidalo/a)",
+        "mode": "🎲 Modalità di Gioco", "mode_gym": "🏋️ Palestra (Tu sei l'Archetipo)", "mode_exp": "🍷 Esperienza (Il Chatbot impersona l'archetipo)",
         "dyn": "🎯 Dinamica (Solo Palestra)", "pursuer": "Seduttore (Insegui tu)", "desired": "Diffidente (Fatti sedurre)",
         "start": "🚀 INIZIA PARTITA", "back_btn": "⬅️ Termina e Resetta",
         "analyze_btn": "🫂 Chiedi Analisi Psicologica", "coach_title": "🕵️‍♂️ Analizzatore di Frame",
-        "sex_p": "Sesso del Partner", "prev": "⬅️ Precedente", "next": "Successivo ➡️",
+        "sex_p": "Sesso del Partner (Chatbot)", "prev": "⬅️ Precedente", "next": "Successivo ➡️",
         "missing_img": "⚠️ Immagini non trovate in assets/. Verifica che siano .png e che i nomi siano corretti.",
         "input_placeholder": "Digita qui...", "coach_desc": "Incolla qui la tua chat vera...",
         "coach_btn": "Analizza Frame",
         "offline": "📵 L'utente è andato Offline. La chat è terminata.",
-        "slider_weird": "👽 Risposte Strane/Caotiche (%)", "slider_boring": "🥱 Risposte Banali (%)", "slider_enth": "🐶 Risposte Entusiaste (%)"
+        "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.4",
+        "title": "⚖️ Social Dynamics Sandbox v4.5",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
-        "mode": "🎲 Game Mode", "mode_gym": "🏋️ Gym (You are the Archetype)", "mode_exp": "🍷 Experience (Face them)",
+        "mode": "🎲 Game Mode", "mode_gym": "🏋️ Gym (You are the Archetype)", "mode_exp": "🍷 Experience (Chatbot impersonates Archetype)",
         "dyn": "🎯 Dynamics (Gym Only)", "pursuer": "Seducer (You pursue)", "desired": "Skeptical (Get seduced)",
         "start": "🚀 START GAME", "back_btn": "⬅️ End & Reset",
         "analyze_btn": "🫂 Ask for Psychological Analysis", "coach_title": "🕵️‍♂️ Frame Analyzer",
-        "sex_p": "Partner's Gender", "prev": "⬅️ Previous", "next": "Next ➡️",
+        "sex_p": "Partner's Gender (Chatbot)", "prev": "⬅️ Previous", "next": "Next ➡️",
         "missing_img": "⚠️ Images not found in assets/. Check if they are .png and names are correct.",
         "input_placeholder": "Type here...", "coach_desc": "Paste your real chat here...",
         "coach_btn": "Analyze Frame",
         "offline": "📵 The user went Offline. Chat has ended.",
-        "slider_weird": "👽 Weird/Chaotic Replies (%)", "slider_boring": "🥱 Boring/One-word Replies (%)", "slider_enth": "🐶 Enthusiastic Replies (%)"
+        "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.4",
+        "title": "⚖️ 社交动态沙盒 v4.5",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
-        "mode": "🎲 游戏模式", "mode_gym": "🏋️ 健身房 (你是原型)", "mode_exp": "🍷 体验 (面对他们)",
+        "mode": "🎲 游戏模式", "mode_gym": "🏋️ 健身房 (你是原型)", "mode_exp": "🍷 体验 (聊天机器人扮演原型)",
         "dyn": "🎯 动态 (仅限健身房)", "pursuer": "诱惑者 (你追求)", "desired": "怀疑者 (被诱惑)",
         "start": "🚀 开始游戏", "back_btn": "⬅️ 结束并重置",
         "analyze_btn": "🫂 心理分析", "coach_title": "🕵️‍♂️ 框架分析器",
-        "sex_p": "伴侣性别", "prev": "⬅️ 上一个", "next": "下一个 ➡️",
+        "sex_p": "伴侣性别 (聊天机器人)", "prev": "⬅️ 上一个", "next": "下一个 ➡️",
         "missing_img": "⚠️ 在 assets/ 文件夹中未找到图片。请检查它们是否为 .png 以及名称是否正确。",
         "input_placeholder": "在这里输入...", "coach_desc": "在这里粘贴您的真实聊天记录...",
         "coach_btn": "分析框架",
         "offline": "📵 用户已离线。聊天结束。",
-        "slider_weird": "👽 奇怪/混乱的回复 (%)", "slider_boring": "🥱 无聊/敷衍的回复 (%)", "slider_enth": "🐶 热情的回复 (%)"
+        "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.4",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.5",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
-        "mode": "🎲 ゲームモード", "mode_gym": "🏋️ ジム (あなたがアーキタイプ)", "mode_exp": "🍷 体験 (相手と対峙する)",
+        "mode": "🎲 ゲームモード", "mode_gym": "🏋️ ジム (あなたがアーキタイプ)", "mode_exp": "🍷 体験 (チャットボットがアーキタイプを演じる)",
         "dyn": "🎯 ダイナミクス (ジムのみ)", "pursuer": "誘惑者 (あなたが追求する)", "desired": "懐疑的 (誘惑される)",
         "start": "🚀 ゲーム開始", "back_btn": "⬅️ 終了してリセット",
         "analyze_btn": "🫂 心理分析を依頼", "coach_title": "🕵️‍♂️ フレームアナライザー",
-        "sex_p": "パートナーの性別", "prev": "⬅️ 戻る", "next": "次へ ➡️",
+        "sex_p": "パートナーの性別 (チャットボット)", "prev": "⬅️ 戻る", "next": "次へ ➡️",
         "missing_img": "⚠️ assets/ に画像が見つかりません。.png であることと名前を確認してください。",
         "input_placeholder": "ここに入力...", "coach_desc": "実際のチャットをここに貼り付けてください...",
         "coach_btn": "フレームを分析",
         "offline": "📵 ユーザーはオフラインになりました。チャットは終了しました。",
-        "slider_weird": "👽 奇妙な/カオスな返信 (%)", "slider_boring": "🥱 退屈な/一言の返信 (%)", "slider_enth": "🐶 熱狂的な返信 (%)"
+        "slider_weird": "👽 奇妙な/カオス (%)", "slider_boring": "🥱 退屈/一言 (%)", "slider_enth": "🐶 熱狂的 (%)"
     }
 }
 
@@ -165,7 +185,6 @@ ARCH_DESC = {
     }
 }
 
-# --- 3. SETUP PAGINA E CSS ---
 st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
 
 if "goth_active" not in st.session_state: st.session_state.goth_active = False
@@ -197,62 +216,86 @@ if st.session_state.goth_active:
 
 model, _ = get_best_model(api_key)
 
-# --- SELETTORE LINGUA ---
 lang_options = ["English", "Italiano", "中文", "日本語"]
 st.session_state.lang_choice = st.selectbox("🌐 Language / Lingua / 语言 / 言語", lang_options, index=lang_options.index(st.session_state.lang_choice))
 t = UI[st.session_state.lang_choice]
 desc = ARCH_DESC[st.session_state.lang_choice]
 MAX_TURNS_EXP = 20
 
-# --- 4. INTERFACCIA ---
 tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 
 with tab_sim:
     if not st.session_state.ui_messages:
         st.title(t["title"])
-        
         st.write(t["setup"])
         
-        col_name, col_age = st.columns([2, 1])
+        # --- SCELTA SESSO, NOME DINAMICO E MODALITA ---
+        col_sex, col_name, col_age = st.columns([1, 2, 1])
+        with col_sex:
+            sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
         with col_name:
-            nome_u = st.text_input(t["name_u"], "Anon")
+            gender_key = "boy" if sesso_u == t["boy"] else "girl"
+            default_n = DEFAULT_NAMES[st.session_state.lang_choice][gender_key]
+            nome_u = st.text_input(t["name_u"], value=default_n)
         with col_age:
             eta_u = st.slider(t["age"], 18, 40, 33)
 
         col1, col2 = st.columns(2)
         with col1:
-            sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
             modalita = st.radio(t["mode"], [t["mode_gym"], t["mode_exp"]])
-        with col2:
-            sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
-            goth_toggle = st.toggle(t["goth"])
             if modalita == t["mode_gym"]:
                 dinamica = st.radio(t["dyn"], [t["pursuer"], t["desired"]])
             else: dinamica = "Esperienza"
+        with col2:
+            sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
+            goth_toggle = st.toggle(t["goth"])
 
-        # --- MOTORE STOCASTICO (I 3 SLIDER) ---
+        # --- MOTORE STOCASTICO E GRAFICO A TORTA ---
         st.markdown("---")
         st.markdown("### 🎲 " + ("Comportamento Partner" if st.session_state.lang_choice == "Italiano" else "Partner Behavior"))
-        col_s1, col_s2, col_s3 = st.columns(3)
-        with col_s1:
+        
+        col_sliders, col_pie = st.columns([2, 1])
+        with col_sliders:
             prob_strana = st.slider(t["slider_weird"], 0, 100, 5)
-        with col_s2:
             prob_banale = st.slider(t["slider_boring"], 0, 100, 25)
-        with col_s3:
             prob_enth = st.slider(t["slider_enth"], 0, 100, 10)
         
-        # Validazione Probabilità
         if (prob_strana + prob_banale + prob_enth) > 100:
-            st.error("⚠️ La somma non può superare il 100%. L'IA riporterà il limite ai valori normali.")
+            st.error("⚠️ La somma non può superare 100.")
             prob_normale = 0
         else:
             prob_normale = 100 - (prob_strana + prob_banale + prob_enth)
 
+        with col_pie:
+            # Creazione Grafico a Torta in Altair
+            df_pie = pd.DataFrame({
+                "Comportamento": ["Normale", "Strana", "Banale", "Entusiasta"],
+                "Probabilità": [prob_normale, prob_strana, prob_banale, prob_enth]
+            })
+            df_pie = df_pie[df_pie["Probabilità"] > 0]
+            
+            pie_chart = alt.Chart(df_pie).mark_arc(innerRadius=30).encode(
+                theta=alt.Theta(field="Probabilità", type="quantitative"),
+                color=alt.Color(field="Comportamento", type="nominal", 
+                                scale=alt.Scale(domain=["Normale", "Strana", "Banale", "Entusiasta"], 
+                                                range=["#4b4bff", "#ff4bff", "#888888", "#ffb400"]), 
+                                legend=None),
+                tooltip=["Comportamento", "Probabilità"]
+            ).properties(width=150, height=150)
+            
+            st.altair_chart(pie_chart, use_container_width=True)
+
         st.markdown("---")
 
-        cartella = "femmine" if sesso_p == t["girl"] else "maschi"
+        # --- LOGICA CORRETTA PER L'ANELLO (SELEZIONE CARTELLA) ---
+        if modalita == t["mode_gym"]:
+            # L'utente è l'archetipo, mostra il suo sesso
+            cartella = "femmine" if sesso_u == t["girl"] else "maschi"
+        else:
+            # L'IA è l'archetipo, mostra il sesso del partner
+            cartella = "femmine" if sesso_p == t["girl"] else "maschi"
+
         idx = st.session_state.roster_idx
-        
         names = [ARCH_NAMES[(idx-1)%10], ARCH_NAMES[idx], ARCH_NAMES[(idx+1)%10]]
         imgs = [get_base64_image(f"assets/{cartella}/{n}.png") for n in names]
 
@@ -287,7 +330,6 @@ with tab_sim:
                     base_instruction = f"IMPORTANT: You MUST speak exclusively in {st.session_state.lang_choice}.\n"
                     prompt_init = ""
 
-                    # --- LOGICA EASTER EGG (GABRI) ---
                     easter_egg_triggered = False
                     if sesso_u == t["girl"] and sesso_p == t["boy"]:
                         chance = 0.034
@@ -363,7 +405,6 @@ with tab_sim:
             
         for m in st.session_state.ui_messages:
             with st.chat_message(m["role"]): 
-                # L'IA potrebbe generare formattazione HTML per i colori Goth, permettiamolo.
                 if "[MOOD]:" in m["content"] or "[状态]:" in m["content"] or "[気分]:" in m["content"]:
                     st.markdown(m["content"], unsafe_allow_html=True) 
                 else:
@@ -380,7 +421,6 @@ with tab_sim:
                 
                 prompt_for_ai = p
                 
-                # INIEZIONE STOCASTICA (TIRO DI DADI PER OGNI MESSAGGIO)
                 if hasattr(st.session_state, 'prob_normale'):
                     tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
                     pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
@@ -393,7 +433,6 @@ with tab_sim:
                     elif risposta_scelta == "Entusiasta":
                         prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, mostra un ENTUSIASMO INGIUSTIFICATO per quello che ha detto l'utente. Fai tanti complimenti."
 
-                # INIEZIONE LIMITE TURNI (ESPERIENZA)
                 if st.session_state.modalita_attiva == t["mode_exp"]:
                     if user_turns == MAX_TURNS_EXP - 3:
                         prompt_for_ai += f"\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Nel tuo prossimo messaggio, inventa una scusa ASSOLUTAMENTE COERENTE CON IL TUO ARCHETIPO per dire a {st.session_state.nome_utente} che tra poco devi scappare via o staccarti dal telefono."
