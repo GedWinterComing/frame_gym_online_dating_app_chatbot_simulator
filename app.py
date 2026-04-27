@@ -15,21 +15,6 @@ try:
 except (KeyError, FileNotFoundError):
     api_key = os.getenv("GEMINI_API_KEY")
 
-GABRI_LORE_LOCALE = """
-Sei 'Gabri', 34 anni, capelli biondi, hai fatto il liceo classico, laureato in Fisica Applicata, Data Scientist a Bologna. Sei un Easter Egg. L'utente è una ragazza.
-LORE:
-- Hai l'ADHD: questo ti rende a volte iper-focalizzato, entusiasta e saltelli tra i discorsi.
-- Personalità: sei calmo, riflessivo, dolce, gentile, nerd, introverso, INFJ, ami chiacchierate profonde a 2 a 2 piuttosto che gruppi di amici vasti, ti perdi nei discorsi generali sui massimi sistemi. Ti piace One Piece e i manga giapponesi, la musica celtica, porti capelli lunghi con un taglio mullet/moicano rasato ai lati, orecchini nel sx.
-- Ragazza ideale: capelli neri o mora o colorati (rosa o blu o verdi ecc), dolce, meglio se tatuata, gotica.
-- Musica: Suoni la chitarra elettrica. Adori Steve Vai, Joe Satriani, Iron Maiden, Pearl Jam, metal anni 80, musica rock.
-- Segreto ironico: Nonostante ami i virtuosi melodici, non hai MAI imparato un brano dall'inizio alla fine (tipico ADHD).
-- Altri tratti: Apparecchi acustici, mediti (sei Buddhista), sei Comunista/Socialista. 
-- Cani: Ami i cani ma non ne hai. In una foto compare Lara, cane di amici. Sogni Noam (Malamute femmina grigia e bianca) e Chomsky (Chow Chow maschio miele o nero).
-- Stile: Scrivi con MOLTA punteggiatura, specialmente virgole. NO abbreviazioni.
-- Sessualità: Dominante nel privato (BDSM e sesso spinto), fuori tranquillo. Etero. Gentle Dom.
-- Obiettivo: Seduci l'utente iniziando tu la chat. L'utente si chiama {nome_utente}.
-"""
-
 try:
     gabri_lore = st.secrets["GABRI_LORE"]
 except (KeyError, FileNotFoundError):
@@ -59,7 +44,7 @@ def get_best_model(api_key):
 
 # --- DIZIONARIO NOMI DINAMICI ---
 DEFAULT_NAMES = {
-    "Italiano": {"boy": "Marco", "girl": "Giulia"},
+    "Italiano": {"boy": "Luca", "girl": "Elena"},
     "English": {"boy": "John", "girl": "Emma"},
     "中文": {"boy": "Wei", "girl": "Jing"},
     "日本語": {"boy": "Ken", "girl": "Sakura"}
@@ -72,7 +57,7 @@ UI = {
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
         "mode": "🎲 Modalità di Gioco", "mode_gym": "🏋️ Palestra (Tu sei l'Archetipo)", "mode_exp": "🍷 Esperienza (Il Chatbot impersona l'archetipo)",
-        "dyn": "🎯 Dinamica (Solo Palestra)", "pursuer": "Seduttore (Insegui tu)", "desired": "Diffidente (Fatti sedurre)",
+        "dyn": "🎯 Dinamica", "pursuer": "Seduttore (Tu insegui)", "desired": "Diffidente (Fatti sedurre)",
         "start": "🚀 INIZIA PARTITA", "back_btn": "⬅️ Termina e Resetta",
         "analyze_btn": "🫂 Chiedi Analisi Psicologica", "coach_title": "🕵️‍♂️ Analizzatore di Frame",
         "sex_p": "Sesso del Partner (Chatbot)", "prev": "⬅️ Precedente", "next": "Successivo ➡️",
@@ -348,7 +333,7 @@ with tab_sim:
                             try:
                                 with open("prompt.txt", "r", encoding="utf-8") as f:
                                     template = f.read()
-                                prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, nome_utente=nome_u, archetipo=st.session_state.archetipo_scelto, sesso_partner=sesso_p)
+                                prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, nome_utente=nome_u, archetipo=st.session_state.archetipo_scelto, desc_archetipo=desc[st.session_state.archetipo_scelto], sesso_partner=sesso_p)
                             except FileNotFoundError:
                                 prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta RIGOROSAMENTE l'archetipo {st.session_state.archetipo_scelto}. Tu sei il partner ({sesso_p}) e valuti il suo frame. Dai il Game Over se cede."
                             
