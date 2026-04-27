@@ -6,6 +6,7 @@ DATI DELLA SESSIONE:
 - Nome dell'Utente: {nome_utente}
 - Sesso dell'Utente: {sesso_utente}
 - Archetipo dell'Utente da mantenere: {archetipo}
+- REGOLE DEL SUO ARCHETIPO (Deve rispettarle rigorosamente): {desc_archetipo}
 - Sesso del Partner (il personaggio che tu devi impersonare): {sesso_partner}
 
 REGOLE DI STILE E LINGUAGGIO (ASSOLUTE E TASSATIVE):
