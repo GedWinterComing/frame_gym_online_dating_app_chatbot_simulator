@@ -52,7 +52,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.6",
+        "title": "⚖️ Social Dynamics Sandbox v4.7",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -65,10 +65,13 @@ UI = {
         "input_placeholder": "Digita qui...", "coach_desc": "Incolla qui la tua chat vera...",
         "coach_btn": "Analizza Frame",
         "offline": "📵 L'utente è andato Offline. La chat è terminata.",
-        "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)"
+        "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)",
+        "rate_warning_msg": "⏳ Nota: L'IA ha un limite di messaggi. Non inviare messaggi troppo velocemente.",
+        "rate_error": "🚨 Limite API Raggiunto! L'IA si sta ricaricando. Aspetta circa 60 secondi e clicca il tasto qui sotto per inviare il tuo messaggio.",
+        "retry_btn": "🔄 Riprova a Inviare"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.6",
+        "title": "⚖️ Social Dynamics Sandbox v4.7",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -81,10 +84,13 @@ UI = {
         "input_placeholder": "Type here...", "coach_desc": "Paste your real chat here...",
         "coach_btn": "Analyze Frame",
         "offline": "📵 The user went Offline. Chat has ended.",
-        "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)"
+        "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)",
+        "rate_warning_msg": "⏳ Note: The AI has a rate limit. Please do not send messages too rapidly.",
+        "rate_error": "🚨 API Limit Reached! The AI is cooling down. Wait about 60 seconds and click the button below to resend your message.",
+        "retry_btn": "🔄 Retry Sending"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.6",
+        "title": "⚖️ 社交动态沙盒 v4.7",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -97,10 +103,13 @@ UI = {
         "input_placeholder": "在这里输入...", "coach_desc": "在这里粘贴您的真实聊天记录...",
         "coach_btn": "分析框架",
         "offline": "📵 用户已离线。聊天结束。",
-        "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)"
+        "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)",
+        "rate_warning_msg": "⏳ 注意：AI 存在调用频率限制，请勿发送过快。",
+        "rate_error": "🚨 API 限制！AI 需要冷却。请等待约 60 秒，然后点击下方按钮重新发送。",
+        "retry_btn": "🔄 重新发送"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.6",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.7",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -113,7 +122,10 @@ UI = {
         "input_placeholder": "ここに入力...", "coach_desc": "実際のチャットをここに貼り付けてください...",
         "coach_btn": "フレームを分析",
         "offline": "📵 ユーザーはオフラインになりました。チャットは終了しました。",
-        "slider_weird": "👽 奇妙な/カオス (%)", "slider_boring": "🥱 退屈/一言 (%)", "slider_enth": "🐶 熱狂的 (%)"
+        "slider_weird": "👽 奇妙な/カオス (%)", "slider_boring": "🥱 退屈/一言 (%)", "slider_enth": "🐶 熱狂的 (%)",
+        "rate_warning_msg": "⏳ メモ: AI にはレート制限があります。メッセージを速く送りすぎないでください。",
+        "rate_error": "🚨 API 制限到達！AI が冷却中です。約60秒待ってから下のボタンをクリックして再送信してください。",
+        "retry_btn": "🔄 再送信"
     }
 }
 
@@ -178,6 +190,9 @@ if "archetipo_scelto" not in st.session_state: st.session_state.archetipo_scelto
 if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
 if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
+
+# VARIABILE PER GESTIRE I LIMITI API
+if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
 
 st.markdown("""
     <style>
@@ -269,13 +284,10 @@ with tab_sim:
 
         st.markdown("---")
 
-        # --- LOGICA CARTELLA BASE VS GOTH ---
         base_dir = "assets"
-        # Se siamo in Esperienza E il Gothificatore è attivo, peschiamo le foto Goth
         if modalita == t["mode_exp"] and goth_toggle:
             base_dir = "goth"
 
-        # --- LOGICA SOTTOCARTELLA (M/F) ---
         if modalita == t["mode_gym"]:
             sub_dir = "femmine" if sesso_u == t["girl"] else "maschi"
         else:
@@ -356,11 +368,14 @@ with tab_sim:
                         - ESTETICA TESTUALE: Usa occasionalmente la formattazione HTML per colorare singole parole chiave nel messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori tipici dei capelli alternativi: magenta, cyan, limegreen o darkred. Usa molto il *corsivo* per dare un tono drammatico.
                         """
                     
-                    chat = model.start_chat(history=[])
-                    res = chat.send_message(prompt_init)
-                    st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
-                    st.session_state.gemini_history = chat.history
-                    st.rerun()
+                    try:
+                        chat = model.start_chat(history=[])
+                        res = chat.send_message(prompt_init)
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.rerun()
+                    except Exception as e:
+                        st.error(t["rate_error"])
                     
             if c3.button(t["next"], use_container_width=True): 
                 st.session_state.roster_idx = (idx + 1) % 10
@@ -376,6 +391,7 @@ with tab_sim:
             if st.button(t["back_btn"], use_container_width=True):
                 st.session_state.ui_messages = []
                 st.session_state.goth_active = False
+                st.session_state.pending_user_msg = None
                 st.rerun()
         with col_btn2:
             if st.session_state.modalita_attiva == t["mode_exp"]:
@@ -391,6 +407,8 @@ with tab_sim:
                 st.info(res_report.text)
             st.markdown("---")
             
+        st.caption(t["rate_warning_msg"])
+            
         for m in st.session_state.ui_messages:
             with st.chat_message(m["role"]): 
                 if "[MOOD]:" in m["content"] or "[状态]:" in m["content"] or "[気分]:" in m["content"]:
@@ -403,35 +421,69 @@ with tab_sim:
         if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
             st.error(t["offline"])
         else:
-            if p := st.chat_input(t["input_placeholder"]):
-                st.session_state.ui_messages.append({"role": "user", "content": p})
-                with st.chat_message("user"): st.markdown(p)
-                
-                prompt_for_ai = p
-                
-                if hasattr(st.session_state, 'prob_normale'):
-                    tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
-                    pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
-                    risposta_scelta = random.choices(tipi_risposta, weights=pesi, k=1)[0]
+            # --- BLOCCO RETRY (SE C'È STATO UN ERRORE API) ---
+            if st.session_state.pending_user_msg:
+                st.error(t["rate_error"])
+                st.info(f"**Tuo messaggio in sospeso:** {st.session_state.pending_user_msg}")
+                if st.button(t["retry_btn"], type="primary"):
+                    p = st.session_state.pending_user_msg
+                    prompt_for_ai = p
                     
-                    if risposta_scelta == "Strana":
-                        prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, ignora leggermente la logica del tuo archetipo e fornisci una risposta CAOTICA, BIZZARRA o TOTALMENTE FUORI CONTESTO."
-                    elif risposta_scelta == "Banale":
-                        prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, sii ESTREMAMENTE noioso. Rispondi a monosillabi (es. 'Ah ok', 'Boh', 'Certo') senza fare domande."
-                    elif risposta_scelta == "Entusiasta":
-                        prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, mostra un ENTUSIASMO INGIUSTIFICATO per quello che ha detto l'utente. Fai tanti complimenti."
+                    if hasattr(st.session_state, 'prob_normale'):
+                        tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
+                        pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
+                        risposta_scelta = random.choices(tipi_risposta, weights=pesi, k=1)[0]
+                        if risposta_scelta == "Strana": prompt_for_ai += "\n\n[SISTEMA]: Rispondi in modo CAOTICO o BIZZARRO."
+                        elif risposta_scelta == "Banale": prompt_for_ai += "\n\n[SISTEMA]: Rispondi in modo ESTREMAMENTE noioso a monosillabi."
+                        elif risposta_scelta == "Entusiasta": prompt_for_ai += "\n\n[SISTEMA]: Sii MOLTO ENTUSIASTA e fai complimenti."
 
-                if st.session_state.modalita_attiva == t["mode_exp"]:
-                    if user_turns == MAX_TURNS_EXP - 3:
-                        prompt_for_ai += f"\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Nel tuo prossimo messaggio, inventa una scusa ASSOLUTAMENTE COERENTE CON IL TUO ARCHETIPO per dire a {st.session_state.nome_utente} che tra poco devi scappare via o staccarti dal telefono."
-                    elif user_turns == MAX_TURNS_EXP - 1:
-                        prompt_for_ai += f"\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente {st.session_state.nome_utente} e chiudi la conversazione in modo coerente col tuo archetipo, poi esci dalla chat."
+                    try:
+                        chat = model.start_chat(history=st.session_state.gemini_history)
+                        res = chat.send_message(prompt_for_ai)
+                        st.session_state.ui_messages.append({"role": "user", "content": p})
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.session_state.pending_user_msg = None
+                        st.rerun()
+                    except Exception as e:
+                        st.error(t["rate_error"]) # Mostra di nuovo l'errore se fallisce ancora
+            else:
+                # --- NORMALE CHAT INPUT ---
+                if p := st.chat_input(t["input_placeholder"]):
+                    st.session_state.ui_messages.append({"role": "user", "content": p})
+                    with st.chat_message("user"): st.markdown(p)
+                    
+                    prompt_for_ai = p
+                    
+                    if hasattr(st.session_state, 'prob_normale'):
+                        tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
+                        pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
+                        risposta_scelta = random.choices(tipi_risposta, weights=pesi, k=1)[0]
+                        
+                        if risposta_scelta == "Strana":
+                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, ignora leggermente la logica del tuo archetipo e fornisci una risposta CAOTICA, BIZZARRA o TOTALMENTE FUORI CONTESTO."
+                        elif risposta_scelta == "Banale":
+                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, sii ESTREMAMENTE noioso. Rispondi a monosillabi (es. 'Ah ok', 'Boh', 'Certo') senza fare domande."
+                        elif risposta_scelta == "Entusiasta":
+                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, mostra un ENTUSIASMO INGIUSTIFICATO per quello che ha detto l'utente. Fai tanti complimenti."
 
-                chat = model.start_chat(history=st.session_state.gemini_history)
-                res = chat.send_message(prompt_for_ai)
-                st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
-                st.session_state.gemini_history = chat.history
-                st.rerun()
+                    if st.session_state.modalita_attiva == t["mode_exp"]:
+                        if user_turns == MAX_TURNS_EXP - 3:
+                            prompt_for_ai += f"\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Nel tuo prossimo messaggio, inventa una scusa ASSOLUTAMENTE COERENTE CON IL TUO ARCHETIPO per dire a {st.session_state.nome_utente} che tra poco devi scappare via o staccarti dal telefono."
+                        elif user_turns == MAX_TURNS_EXP - 1:
+                            prompt_for_ai += f"\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente {st.session_state.nome_utente} e chiudi la conversazione in modo coerente col tuo archetipo, poi esci dalla chat."
+
+                    try:
+                        chat = model.start_chat(history=st.session_state.gemini_history)
+                        res = chat.send_message(prompt_for_ai)
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.rerun()
+                    except Exception as e:
+                        # SE FALLISCE, SALVIAMO IL MESSAGGIO PER IL RETRY E RIMUOVIAMO QUELLO APPENA STAMPATO
+                        st.session_state.ui_messages.pop()
+                        st.session_state.pending_user_msg = p
+                        st.rerun()
 
 with tab_coach:
     st.title(t["coach_title"])
