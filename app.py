@@ -52,11 +52,11 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.7",
+        "title": "⚖️ Social Dynamics Sandbox v4.8",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
-        "mode": "🎲 Modalità di Gioco", "mode_gym": "🏋️ Palestra (Tu sei l'Archetipo)", "mode_exp": "🍷 Esperienza (Il Chatbot impersona l'archetipo)",
+        "mode": "🎲 Modalità di Gioco", "mode_gym": "🏋️ Palestra (Tu sei l'archetipo)", "mode_exp": "🍷 Esperienza (Il Chatbot impersona l'archetipo)",
         "dyn": "🎯 Dinamica", "pursuer": "Seduttore (Tu insegui)", "desired": "Diffidente (Fatti sedurre)",
         "start": "🚀 INIZIA PARTITA", "back_btn": "⬅️ Termina e Resetta",
         "analyze_btn": "🫂 Chiedi Analisi Psicologica", "coach_title": "🕵️‍♂️ Analizzatore di Frame",
@@ -71,11 +71,11 @@ UI = {
         "retry_btn": "🔄 Riprova a Inviare"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.7",
+        "title": "⚖️ Social Dynamics Sandbox v4.8",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
-        "mode": "🎲 Game Mode", "mode_gym": "🏋️ Gym (You are the Archetype)", "mode_exp": "🍷 Experience (Chatbot impersonates Archetype)",
+        "mode": "🎲 Game Mode", "mode_gym": "🏋️ Gym (You are the archetype)", "mode_exp": "🍷 Experience (Chatbot impersonates archetype)",
         "dyn": "🎯 Dynamics", "pursuer": "Seducer (You pursue)", "desired": "Skeptical (Get seduced)",
         "start": "🚀 START GAME", "back_btn": "⬅️ End & Reset",
         "analyze_btn": "🫂 Ask for Psychological Analysis", "coach_title": "🕵️‍♂️ Frame Analyzer",
@@ -90,7 +90,7 @@ UI = {
         "retry_btn": "🔄 Retry Sending"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.7",
+        "title": "⚖️ 社交动态沙盒 v4.8",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -109,7 +109,7 @@ UI = {
         "retry_btn": "🔄 重新发送"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.7",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.8",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -191,7 +191,6 @@ if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
 if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
 
-# VARIABILE PER GESTIRE I LIMITI API
 if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
 
 st.markdown("""
@@ -421,7 +420,6 @@ with tab_sim:
         if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
             st.error(t["offline"])
         else:
-            # --- BLOCCO RETRY (SE C'È STATO UN ERRORE API) ---
             if st.session_state.pending_user_msg:
                 st.error(t["rate_error"])
                 st.info(f"**Tuo messaggio in sospeso:** {st.session_state.pending_user_msg}")
@@ -446,9 +444,8 @@ with tab_sim:
                         st.session_state.pending_user_msg = None
                         st.rerun()
                     except Exception as e:
-                        st.error(t["rate_error"]) # Mostra di nuovo l'errore se fallisce ancora
+                        st.error(t["rate_error"])
             else:
-                # --- NORMALE CHAT INPUT ---
                 if p := st.chat_input(t["input_placeholder"]):
                     st.session_state.ui_messages.append({"role": "user", "content": p})
                     with st.chat_message("user"): st.markdown(p)
@@ -480,7 +477,6 @@ with tab_sim:
                         st.session_state.gemini_history = chat.history
                         st.rerun()
                     except Exception as e:
-                        # SE FALLISCE, SALVIAMO IL MESSAGGIO PER IL RETRY E RIMUOVIAMO QUELLO APPENA STAMPATO
                         st.session_state.ui_messages.pop()
                         st.session_state.pending_user_msg = p
                         st.rerun()
