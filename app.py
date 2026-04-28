@@ -52,7 +52,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.5",
+        "title": "⚖️ Social Dynamics Sandbox v4.6",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -61,55 +61,55 @@ UI = {
         "start": "🚀 INIZIA PARTITA", "back_btn": "⬅️ Termina e Resetta",
         "analyze_btn": "🫂 Chiedi Analisi Psicologica", "coach_title": "🕵️‍♂️ Analizzatore di Frame",
         "sex_p": "Sesso del Partner (Chatbot)", "prev": "⬅️ Precedente", "next": "Successivo ➡️",
-        "missing_img": "⚠️ Immagini non trovate in assets/. Verifica che siano .png e che i nomi siano corretti.",
+        "missing_img": "⚠️ Immagini non trovate. Verifica i nomi e le cartelle (assets/ o goth/).",
         "input_placeholder": "Digita qui...", "coach_desc": "Incolla qui la tua chat vera...",
         "coach_btn": "Analizza Frame",
         "offline": "📵 L'utente è andato Offline. La chat è terminata.",
         "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.5",
+        "title": "⚖️ Social Dynamics Sandbox v4.6",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
         "mode": "🎲 Game Mode", "mode_gym": "🏋️ Gym (You are the Archetype)", "mode_exp": "🍷 Experience (Chatbot impersonates Archetype)",
-        "dyn": "🎯 Dynamics (Gym Only)", "pursuer": "Seducer (You pursue)", "desired": "Skeptical (Get seduced)",
+        "dyn": "🎯 Dynamics", "pursuer": "Seducer (You pursue)", "desired": "Skeptical (Get seduced)",
         "start": "🚀 START GAME", "back_btn": "⬅️ End & Reset",
         "analyze_btn": "🫂 Ask for Psychological Analysis", "coach_title": "🕵️‍♂️ Frame Analyzer",
         "sex_p": "Partner's Gender (Chatbot)", "prev": "⬅️ Previous", "next": "Next ➡️",
-        "missing_img": "⚠️ Images not found in assets/. Check if they are .png and names are correct.",
+        "missing_img": "⚠️ Images not found. Check names and folders (assets/ or goth/).",
         "input_placeholder": "Type here...", "coach_desc": "Paste your real chat here...",
         "coach_btn": "Analyze Frame",
         "offline": "📵 The user went Offline. Chat has ended.",
         "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.5",
+        "title": "⚖️ 社交动态沙盒 v4.6",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
         "mode": "🎲 游戏模式", "mode_gym": "🏋️ 健身房 (你是原型)", "mode_exp": "🍷 体验 (聊天机器人扮演原型)",
-        "dyn": "🎯 动态 (仅限健身房)", "pursuer": "诱惑者 (你追求)", "desired": "怀疑者 (被诱惑)",
+        "dyn": "🎯 动态", "pursuer": "诱惑者 (你追求)", "desired": "怀疑者 (被诱惑)",
         "start": "🚀 开始游戏", "back_btn": "⬅️ 结束并重置",
         "analyze_btn": "🫂 心理分析", "coach_title": "🕵️‍♂️ 框架分析器",
         "sex_p": "伴侣性别 (聊天机器人)", "prev": "⬅️ 上一个", "next": "下一个 ➡️",
-        "missing_img": "⚠️ 在 assets/ 文件夹中未找到图片。请检查它们是否为 .png 以及名称是否正确。",
+        "missing_img": "⚠️ 未找到图片。请检查名称和文件夹 (assets/ 或 goth/)。",
         "input_placeholder": "在这里输入...", "coach_desc": "在这里粘贴您的真实聊天记录...",
         "coach_btn": "分析框架",
         "offline": "📵 用户已离线。聊天结束。",
         "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.5",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.6",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
         "mode": "🎲 ゲームモード", "mode_gym": "🏋️ ジム (あなたがアーキタイプ)", "mode_exp": "🍷 体験 (チャットボットがアーキタイプを演じる)",
-        "dyn": "🎯 ダイナミクス (ジムのみ)", "pursuer": "誘惑者 (あなたが追求する)", "desired": "懐疑的 (誘惑される)",
+        "dyn": "🎯 ダイナミクス", "pursuer": "誘惑者 (あなたが追求する)", "desired": "懐疑的 (誘惑される)",
         "start": "🚀 ゲーム開始", "back_btn": "⬅️ 終了してリセット",
         "analyze_btn": "🫂 心理分析を依頼", "coach_title": "🕵️‍♂️ フレームアナライザー",
         "sex_p": "パートナーの性別 (チャットボット)", "prev": "⬅️ 戻る", "next": "次へ ➡️",
-        "missing_img": "⚠️ assets/ に画像が見つかりません。.png であることと名前を確認してください。",
+        "missing_img": "⚠️ 画像が見つかりません。名前とフォルダ（assets/ または goth/）を確認してください。",
         "input_placeholder": "ここに入力...", "coach_desc": "実際のチャットをここに貼り付けてください...",
         "coach_btn": "フレームを分析",
         "offline": "📵 ユーザーはオフラインになりました。チャットは終了しました。",
@@ -214,7 +214,6 @@ with tab_sim:
         st.title(t["title"])
         st.write(t["setup"])
         
-        # --- SCELTA SESSO, NOME DINAMICO E MODALITA ---
         col_sex, col_name, col_age = st.columns([1, 2, 1])
         with col_sex:
             sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
@@ -235,7 +234,6 @@ with tab_sim:
             sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
             goth_toggle = st.toggle(t["goth"])
 
-        # --- MOTORE STOCASTICO E GRAFICO A TORTA ---
         st.markdown("---")
         st.markdown("### 🎲 " + ("Comportamento Partner" if st.session_state.lang_choice == "Italiano" else "Partner Behavior"))
         
@@ -252,7 +250,6 @@ with tab_sim:
             prob_normale = 100 - (prob_strana + prob_banale + prob_enth)
 
         with col_pie:
-            # Creazione Grafico a Torta in Altair
             df_pie = pd.DataFrame({
                 "Comportamento": ["Normale", "Strana", "Banale", "Entusiasta"],
                 "Probabilità": [prob_normale, prob_strana, prob_banale, prob_enth]
@@ -272,17 +269,23 @@ with tab_sim:
 
         st.markdown("---")
 
-        # --- LOGICA CORRETTA PER L'ANELLO (SELEZIONE CARTELLA) ---
+        # --- LOGICA CARTELLA BASE VS GOTH ---
+        base_dir = "assets"
+        # Se siamo in Esperienza E il Gothificatore è attivo, peschiamo le foto Goth
+        if modalita == t["mode_exp"] and goth_toggle:
+            base_dir = "goth"
+
+        # --- LOGICA SOTTOCARTELLA (M/F) ---
         if modalita == t["mode_gym"]:
-            # L'utente è l'archetipo, mostra il suo sesso
-            cartella = "femmine" if sesso_u == t["girl"] else "maschi"
+            sub_dir = "femmine" if sesso_u == t["girl"] else "maschi"
         else:
-            # L'IA è l'archetipo, mostra il sesso del partner
-            cartella = "femmine" if sesso_p == t["girl"] else "maschi"
+            sub_dir = "femmine" if sesso_p == t["girl"] else "maschi"
+
+        percorso_cartella = f"{base_dir}/{sub_dir}"
 
         idx = st.session_state.roster_idx
         names = [ARCH_NAMES[(idx-1)%10], ARCH_NAMES[idx], ARCH_NAMES[(idx+1)%10]]
-        imgs = [get_base64_image(f"assets/{cartella}/{n}.png") for n in names]
+        imgs = [get_base64_image(f"{percorso_cartella}/{n}.png") for n in names]
 
         if all(imgs):
             st.markdown(f'''
@@ -335,7 +338,7 @@ with tab_sim:
                                     template = f.read()
                                 prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, nome_utente=nome_u, archetipo=st.session_state.archetipo_scelto, desc_archetipo=desc[st.session_state.archetipo_scelto], sesso_partner=sesso_p)
                             except FileNotFoundError:
-                                prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta RIGOROSAMENTE l'archetipo {st.session_state.archetipo_scelto}. Tu sei il partner ({sesso_p}) e valuti il suo frame. Dai il Game Over se cede."
+                                prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta RIGOROSAMENTE l'archetipo {st.session_state.archetipo_scelto}. Le regole sono: {desc[st.session_state.archetipo_scelto]}. Tu sei il partner ({sesso_p}) e valuti il suo frame. Dai il Game Over se cede."
                             
                             if dinamica == t["desired"]: 
                                 prompt_init += f"\n[DINAMICA]: L'utente {nome_u} è il Diffidente/Desiderato. Tu (IA) fai la corte. Se {nome_u} cede troppo in fretta o esce dal Frame da Diffidente, dichiara GAME OVER."
