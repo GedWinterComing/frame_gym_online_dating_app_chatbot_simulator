@@ -29,6 +29,16 @@ def get_base64_image(image_path):
             return None
     return None
 
+def clone_chat_history(history):
+    # Clona la cronologia per evitare mutazioni se l'API fallisce per i rate limits
+    safe_hist = []
+    for msg in history:
+        if isinstance(msg, dict):
+            safe_hist.append({"role": msg["role"], "parts": list(msg["parts"])})
+        else:
+            safe_hist.append({"role": msg.role, "parts": [p.text for p in msg.parts]})
+    return safe_hist
+
 @st.cache_resource(show_spinner="Inizializzazione Motore AI...")
 def get_best_model(api_key):
     if not api_key: return None, None
@@ -52,7 +62,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.10",
+        "title": "⚖️ Social Dynamics Sandbox v4.11",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -73,7 +83,7 @@ UI = {
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.10",
+        "title": "⚖️ Social Dynamics Sandbox v4.11",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -94,7 +104,7 @@ UI = {
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.10",
+        "title": "⚖️ 社交动态沙盒 v4.11",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -115,7 +125,7 @@ UI = {
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.10",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.11",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -226,7 +236,9 @@ lang_options = ["English", "Italiano", "中文", "日本語"]
 st.session_state.lang_choice = st.selectbox("🌐 Language / Lingua / 语言 / 言語", lang_options, index=lang_options.index(st.session_state.lang_choice))
 t = UI[st.session_state.lang_choice]
 desc = ARCH_DESC[st.session_state.lang_choice]
-MAX_TURNS_EXP = 20
+
+# NUOVA VARIABILE TURNI (20 Botta e Risposta = 20 messaggi utente)
+MAX_TURNS = 20
 
 tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 
@@ -388,16 +400,27 @@ with tab_sim:
             with st.chat_message(m["role"]): st.markdown(m["content"], unsafe_allow_html=True)
         
         user_turns = sum(1 for m in st.session_state.ui_messages if m["role"] == "user")
-        if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
+        if user_turns >= MAX_TURNS:
             st.error(t["offline"])
         else:
             if st.session_state.pending_user_msg:
                 st.error(t["rate_error"])
                 if st.button(t["retry_btn"], type="primary"):
                     p = st.session_state.pending_user_msg
+                    prompt_ai = p
+                    if hasattr(st.session_state, 'prob_normale'):
+                        r_scelta = random.choices(["N", "S", "B", "E"], [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth])[0]
+                        if r_scelta == "S": prompt_ai += "\n[SISTEMA]: Risposta CAOTICA."
+                        elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
+                        elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
+                    
+                    if user_turns == MAX_TURNS - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
+                    elif user_turns == MAX_TURNS - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
+
                     try:
-                        chat = model.start_chat(history=st.session_state.gemini_history)
-                        res = chat.send_message(p)
+                        safe_hist = clone_chat_history(st.session_state.gemini_history)
+                        chat = model.start_chat(history=safe_hist)
+                        res = chat.send_message(prompt_ai)
                         st.session_state.ui_messages.append({"role": "user", "content": p})
                         st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
                         st.session_state.gemini_history = chat.history
@@ -414,12 +437,12 @@ with tab_sim:
                         elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
                         elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
                     
-                    if st.session_state.modalita_attiva == t["mode_exp"]:
-                        if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n[SISTEMA]: Inventa una scusa, tra poco devi andare."
-                        elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n[SISTEMA]: Saluta e chiudi."
+                    if user_turns == MAX_TURNS - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
+                    elif user_turns == MAX_TURNS - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
 
                     try:
-                        chat = model.start_chat(history=st.session_state.gemini_history)
+                        safe_hist = clone_chat_history(st.session_state.gemini_history)
+                        chat = model.start_chat(history=safe_hist)
                         res = chat.send_message(prompt_ai)
                         st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
                         st.session_state.gemini_history = chat.history
