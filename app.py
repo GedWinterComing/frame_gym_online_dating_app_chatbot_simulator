@@ -61,7 +61,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.14",
+        "title": "⚖️ Social Dynamics Sandbox v4.16",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -75,14 +75,14 @@ UI = {
         "coach_btn": "Analizza Frame",
         "offline": "📵 L'utente è andato Offline. La chat è terminata.",
         "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)",
-        "rate_warning_msg": "⏳ Nota: L'IA ha un limite di messaggi. Non inviare troppo velocemente.",
-        "rate_error": "🚨 Limite API Raggiunto o Problema di Rete! Aspetta qualche secondo e clicca Riprova.",
+        "rate_warning_msg": "⏳ Nota: L'IA ha un limite di messaggi gratuiti. Non inviare troppo velocemente.",
+        "rate_error": "🚨 Limite API Raggiunto! L'IA si sta raffreddando. Aspetta un minuto vero e clicca Riprova.",
         "retry_btn": "🔄 Riprova a Inviare",
         "coach_arch_name": "Nome dell'archetipo da analizzare", "coach_arch_desc": "Spiega le regole di questo archetipo (Bio, stile, mindset)",
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.14",
+        "title": "⚖️ Social Dynamics Sandbox v4.16",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -97,13 +97,13 @@ UI = {
         "offline": "📵 The user went Offline. Chat has ended.",
         "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)",
         "rate_warning_msg": "⏳ Note: AI has rate limits. Don't send too fast.",
-        "rate_error": "🚨 API Limit or Network Error! Wait a few seconds and click Retry.",
+        "rate_error": "🚨 API Limit Reached! AI is cooling down. Wait a full minute and click Retry.",
         "retry_btn": "🔄 Retry Sending",
         "coach_arch_name": "Name of the archetype to analyze", "coach_arch_desc": "Explain the rules of this archetype (Bio, style, mindset)",
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.14",
+        "title": "⚖️ 社交动态沙盒 v4.16",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -118,13 +118,13 @@ UI = {
         "offline": "📵 用户已离线。聊天结束。",
         "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)",
         "rate_warning_msg": "⏳ 注意：AI 调用频率限制，请勿发送过快。",
-        "rate_error": "🚨 API 限制或网络错误！请等待几秒钟并重试。",
+        "rate_error": "🚨 达到API限制！AI正在冷却。请等待一分钟并重试。",
         "retry_btn": "🔄 重新发送",
         "coach_arch_name": "要分析的原型名称", "coach_arch_desc": "说明此原型的规则（简介、风格、心态）",
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.14",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.16",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -139,7 +139,7 @@ UI = {
         "offline": "📵 ユーザーはオフラインになりました。チャットは終了しました。",
         "slider_weird": "👽 奇妙な/カオス (%)", "slider_boring": "🥱 退屈/一言 (%)", "slider_enth": "🐶 熱狂的 (%)",
         "rate_warning_msg": "⏳ メモ: AI レート制限があります。速く送りすぎないでください。",
-        "rate_error": "🚨 API 制限またはネットワークエラー！数秒待って再試行してください。",
+        "rate_error": "🚨 API制限に達しました！AIが冷却中です。1分待って再試行してください。",
         "retry_btn": "🔄 再送信",
         "coach_arch_name": "分析するアーキタイプの名前", "coach_arch_desc": "このアーキタイプのルールを説明してください（バイオ、スタイル、考え方）",
         "coach_arch_name_ph": "例：ジェントル・ドム、呪われたアーティスト...", "coach_arch_desc_ph": "アーキタイプがどのように振る舞うべきかをここに記述してください..."
@@ -361,7 +361,8 @@ with tab_sim:
                     if goth_toggle:
                         prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Il partner appartiene alla subcultura Goth. Usa occasionalmente la formattazione HTML per colorare singole parole chiave del messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori: magenta, cyan, limegreen o red. Usa molto il *corsivo* per dare un tono drammatico."
                     
-                    prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Inizia subito la conversazione. Genera ESCLUSIVAMENTE la tua risposta per questo singolo turno usando [MOOD] e [MESSAGGIO]. È ASSOLUTAMENTE VIETATO generare un copione intero, simulare le risposte dell'utente, o scrivere 'scambi ideali' o 'Chat da Maestro'. Procedi RIGOROSAMENTE UN SOLO TURNO ALLA VOLTA e fermati in attesa dell'utente. Non ricopiare testo da queste istruzioni."
+                    # REGOLA BIO + MESSAGGIO RIPRISTINATA CORRETTAMENTE
+                    prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente 2 o 3 Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]:. È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente. Fermati in attesa della risposta."
 
                     try:
                         chat = model.start_chat(history=[])
@@ -370,7 +371,7 @@ with tab_sim:
                         st.session_state.gemini_history = chat.history
                         st.rerun()
                     except Exception as e: 
-                        st.error(t["rate_error"])
+                        st.error(f"Errore iniziale di rete. Attendi e ricarica la pagina. Info tecnica: {e}")
             
             if c3.button(t["next"], use_container_width=True): 
                 st.session_state.roster_idx = (idx + 1) % 10
@@ -402,6 +403,7 @@ with tab_sim:
         if user_turns >= MAX_TURNS:
             st.error(t["offline"])
         else:
+            # GESTIONE RETRY CORRETTA (MOSTRA L'ERRORE E NON SI BLOCCA IN SILENZIO)
             if st.session_state.pending_user_msg:
                 st.error(t["rate_error"])
                 if st.button(t["retry_btn"], type="primary"):
@@ -426,7 +428,7 @@ with tab_sim:
                         st.session_state.pending_user_msg = None
                         st.rerun()
                     except Exception as e: 
-                        pass
+                        st.warning(f"⚠️ Ancora bloccato. I server si stanno ricaricando. Aspetta 10 secondi veri e riclicca Riprova. (Dettaglio: {e})")
             else:
                 if p := st.chat_input(t["input_placeholder"]):
                     st.session_state.ui_messages.append({"role": "user", "content": p})
