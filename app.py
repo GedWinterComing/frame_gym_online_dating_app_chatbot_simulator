@@ -29,7 +29,7 @@ def get_base64_image(image_path):
             return None
     return None
 
-@st.cache_resource(show_spinner="Inizializzazione Motore AI / Initializing AI...")
+@st.cache_resource(show_spinner="Inizializzazione Motore AI...")
 def get_best_model(api_key):
     if not api_key: return None, None
     genai.configure(api_key=api_key)
@@ -52,7 +52,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.8",
+        "title": "⚖️ Social Dynamics Sandbox v4.9",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -62,16 +62,17 @@ UI = {
         "analyze_btn": "🫂 Chiedi Analisi Psicologica", "coach_title": "🕵️‍♂️ Analizzatore di Frame",
         "sex_p": "Sesso del Partner (Chatbot)", "prev": "⬅️ Precedente", "next": "Successivo ➡️",
         "missing_img": "⚠️ Immagini non trovate. Verifica i nomi e le cartelle (assets/ o goth/).",
-        "input_placeholder": "Digita qui...", "coach_desc": "Incolla qui la tua chat vera...",
+        "input_placeholder": "Digita qui...", "coach_desc": "Incolla qui la chat reale...",
         "coach_btn": "Analizza Frame",
         "offline": "📵 L'utente è andato Offline. La chat è terminata.",
         "slider_weird": "👽 Strane/Caotiche (%)", "slider_boring": "🥱 Banali/Monosillabi (%)", "slider_enth": "🐶 Entusiaste (%)",
-        "rate_warning_msg": "⏳ Nota: L'IA ha un limite di messaggi. Non inviare messaggi troppo velocemente.",
-        "rate_error": "🚨 Limite API Raggiunto! L'IA si sta ricaricando. Aspetta circa 60 secondi e clicca il tasto qui sotto per inviare il tuo messaggio.",
-        "retry_btn": "🔄 Riprova a Inviare"
+        "rate_warning_msg": "⏳ Nota: L'IA ha un limite di messaggi. Non inviare troppo velocemente.",
+        "rate_error": "🚨 Limite API! Aspetta 60s e clicca Riprova.",
+        "retry_btn": "🔄 Riprova a Inviare",
+        "coach_arch_name": "Nome dell'archetipo da analizzare", "coach_arch_desc": "Spiega le regole di questo archetipo (Bio, stile, mindset)"
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.8",
+        "title": "⚖️ Social Dynamics Sandbox v4.9",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -81,16 +82,17 @@ UI = {
         "analyze_btn": "🫂 Ask for Psychological Analysis", "coach_title": "🕵️‍♂️ Frame Analyzer",
         "sex_p": "Partner's Gender (Chatbot)", "prev": "⬅️ Previous", "next": "Next ➡️",
         "missing_img": "⚠️ Images not found. Check names and folders (assets/ or goth/).",
-        "input_placeholder": "Type here...", "coach_desc": "Paste your real chat here...",
+        "input_placeholder": "Type here...", "coach_desc": "Paste real chat here...",
         "coach_btn": "Analyze Frame",
         "offline": "📵 The user went Offline. Chat has ended.",
         "slider_weird": "👽 Weird/Chaotic (%)", "slider_boring": "🥱 Boring/One-word (%)", "slider_enth": "🐶 Enthusiastic (%)",
-        "rate_warning_msg": "⏳ Note: The AI has a rate limit. Please do not send messages too rapidly.",
-        "rate_error": "🚨 API Limit Reached! The AI is cooling down. Wait about 60 seconds and click the button below to resend your message.",
-        "retry_btn": "🔄 Retry Sending"
+        "rate_warning_msg": "⏳ Note: AI has rate limits. Don't send too fast.",
+        "rate_error": "🚨 API Limit! Wait 60s and click Retry.",
+        "retry_btn": "🔄 Retry Sending",
+        "coach_arch_name": "Name of the archetype to analyze", "coach_arch_desc": "Explain the rules of this archetype (Bio, style, mindset)"
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.8",
+        "title": "⚖️ 社交动态沙盒 v4.9",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -104,12 +106,13 @@ UI = {
         "coach_btn": "分析框架",
         "offline": "📵 用户已离线。聊天结束。",
         "slider_weird": "👽 奇怪/混乱 (%)", "slider_boring": "🥱 无聊/敷衍 (%)", "slider_enth": "🐶 热情 (%)",
-        "rate_warning_msg": "⏳ 注意：AI 存在调用频率限制，请勿发送过快。",
-        "rate_error": "🚨 API 限制！AI 需要冷却。请等待约 60 秒，然后点击下方按钮重新发送。",
-        "retry_btn": "🔄 重新发送"
+        "rate_warning_msg": "⏳ 注意：AI 调用频率限制，请勿发送过快。",
+        "rate_error": "🚨 API 限制！请等待约 60 秒并重试。",
+        "retry_btn": "🔄 重新发送",
+        "coach_arch_name": "要分析的原型名称", "coach_arch_desc": "说明此原型的规则（简介、风格、心态）"
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.8",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.9",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -118,14 +121,15 @@ UI = {
         "start": "🚀 ゲーム開始", "back_btn": "⬅️ 終了してリセット",
         "analyze_btn": "🫂 心理分析を依頼", "coach_title": "🕵️‍♂️ フレームアナライザー",
         "sex_p": "パートナーの性別 (チャットボット)", "prev": "⬅️ 戻る", "next": "次へ ➡️",
-        "missing_img": "⚠️ 画像が見つかりません。名前とフォルダ（assets/ または goth/）を確認してください。",
+        "missing_img": "⚠️ 画像が見つかりません。名前とフォルダを確認してください。",
         "input_placeholder": "ここに入力...", "coach_desc": "実際のチャットをここに貼り付けてください...",
         "coach_btn": "フレームを分析",
         "offline": "📵 ユーザーはオフラインになりました。チャットは終了しました。",
         "slider_weird": "👽 奇妙な/カオス (%)", "slider_boring": "🥱 退屈/一言 (%)", "slider_enth": "🐶 熱狂的 (%)",
-        "rate_warning_msg": "⏳ メモ: AI にはレート制限があります。メッセージを速く送りすぎないでください。",
-        "rate_error": "🚨 API 制限到達！AI が冷却中です。約60秒待ってから下のボタンをクリックして再送信してください。",
-        "retry_btn": "🔄 再送信"
+        "rate_warning_msg": "⏳ メモ: AI レート制限があります。速く送りすぎないでください。",
+        "rate_error": "🚨 API 制限！60秒待って再試行してください。",
+        "retry_btn": "🔄 再送信",
+        "coach_arch_name": "分析するアーキタイプの名前", "coach_arch_desc": "このアーキタイプのルールを説明してください（バイオ、スタイル、考え方）"
     }
 }
 
@@ -190,7 +194,6 @@ if "archetipo_scelto" not in st.session_state: st.session_state.archetipo_scelto
 if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
 if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
-
 if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
 
 st.markdown("""
@@ -269,7 +272,6 @@ with tab_sim:
                 "Probabilità": [prob_normale, prob_strana, prob_banale, prob_enth]
             })
             df_pie = df_pie[df_pie["Probabilità"] > 0]
-            
             pie_chart = alt.Chart(df_pie).mark_arc(innerRadius=30).encode(
                 theta=alt.Theta(field="Probabilità", type="quantitative"),
                 color=alt.Color(field="Comportamento", type="nominal", 
@@ -278,20 +280,16 @@ with tab_sim:
                                 legend=None),
                 tooltip=["Comportamento", "Probabilità"]
             ).properties(width=150, height=150)
-            
             st.altair_chart(pie_chart, use_container_width=True)
 
         st.markdown("---")
 
         base_dir = "assets"
-        if modalita == t["mode_exp"] and goth_toggle:
-            base_dir = "goth"
-
+        if modalita == t["mode_exp"] and goth_toggle: base_dir = "goth"
         if modalita == t["mode_gym"]:
             sub_dir = "femmine" if sesso_u == t["girl"] else "maschi"
         else:
             sub_dir = "femmine" if sesso_p == t["girl"] else "maschi"
-
         percorso_cartella = f"{base_dir}/{sub_dir}"
 
         idx = st.session_state.roster_idx
@@ -320,11 +318,7 @@ with tab_sim:
                     st.session_state.modalita_attiva = modalita
                     st.session_state.archetipo_scelto = names[1] 
                     st.session_state.nome_utente = nome_u
-                    
-                    st.session_state.prob_normale = prob_normale
-                    st.session_state.prob_strana = prob_strana
-                    st.session_state.prob_banale = prob_banale
-                    st.session_state.prob_enth = prob_enth
+                    st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth = prob_normale, prob_strana, prob_banale, prob_enth
                     
                     base_instruction = f"IMPORTANT: You MUST speak exclusively in {st.session_state.lang_choice}.\n"
                     prompt_init = ""
@@ -332,40 +326,28 @@ with tab_sim:
                     easter_egg_triggered = False
                     if sesso_u == t["girl"] and sesso_p == t["boy"]:
                         chance = 0.034
-                        if goth_toggle:
-                            chance *= 1.992
-                        if random.random() < chance:
-                            easter_egg_triggered = True
+                        if goth_toggle: chance *= 1.992
+                        if random.random() < chance: easter_egg_triggered = True
 
                     if easter_egg_triggered:
                         st.session_state.archetipo_scelto = "Gabri 🦇" if goth_toggle else "Gabri 🎸"
                         prompt_init = base_instruction + gabri_lore.format(nome_utente=nome_u)
-                        if goth_toggle:
-                            prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Applica la formattazione testuale descritta sotto."
+                        if goth_toggle: prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Applica la formattazione testuale."
                     else:
                         if modalita == t["mode_gym"]:
                             try:
-                                with open("prompt.txt", "r", encoding="utf-8") as f:
-                                    template = f.read()
+                                with open("prompt.txt", "r", encoding="utf-8") as f: template = f.read()
                                 prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, nome_utente=nome_u, archetipo=st.session_state.archetipo_scelto, desc_archetipo=desc[st.session_state.archetipo_scelto], sesso_partner=sesso_p)
-                            except FileNotFoundError:
-                                prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta RIGOROSAMENTE l'archetipo {st.session_state.archetipo_scelto}. Le regole sono: {desc[st.session_state.archetipo_scelto]}. Tu sei il partner ({sesso_p}) e valuti il suo frame. Dai il Game Over se cede."
+                            except:
+                                prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta l'archetipo {st.session_state.archetipo_scelto}."
                             
-                            if dinamica == t["desired"]: 
-                                prompt_init += f"\n[DINAMICA]: L'utente {nome_u} è il Diffidente/Desiderato. Tu (IA) fai la corte. Se {nome_u} cede troppo in fretta o esce dal Frame da Diffidente, dichiara GAME OVER."
-                            else:
-                                prompt_init += f"\n[DINAMICA]: L'utente {nome_u} è il Seduttore. Tu (IA) fai molta resistenza. Se {nome_u} diventa bisognoso, rompe il Frame o supplica, dichiara GAME OVER."
-                                
+                            if dinamica == t["desired"]: prompt_init += f"\n[DINAMICA]: L'utente è il Diffidente. Tu (IA) fai la corte."
+                            else: prompt_init += f"\n[DINAMICA]: L'utente è il Seduttore. Tu (IA) fai molta resistenza."
                         else:
-                            prompt_init = base_instruction + f"Da questo momento TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. \nL'utente si chiama {nome_u}, ha {eta_u} anni, è un {sesso_u}. \nInizia tu a sedurre l'utente applicando rigorosamente il tuo archetipo, parlando in {st.session_state.lang_choice}. Ricorda che questa è una chat di appuntamenti online."
+                            prompt_init = base_instruction + f"TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu."
                         
                     if goth_toggle:
-                        prompt_init += """
-                        \n[MODALITÀ GOTICA ATTIVA]:
-                        Il partner che devi simulare appartiene alla subcultura Goth.
-                        - PROBABILITÀ PROFILO: Genera con il 70% di probabilità un Classic/Trad Goth. Altrimenti, scegli uno tra questi: Victorian/Romantic Goth, Industrial Goth, Cyber Goth, Gothabilly, Lolita Goth, Nu-Goth.
-                        - ESTETICA TESTUALE: Usa occasionalmente la formattazione HTML per colorare singole parole chiave nel messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori tipici dei capelli alternativi: magenta, cyan, limegreen o darkred. Usa molto il *corsivo* per dare un tono drammatico.
-                        """
+                        prompt_init += "\n[MODALITÀ GOTICA]: Partner Goth. Usa <span> colors e corsivo."
                     
                     try:
                         chat = model.start_chat(history=[])
@@ -373,118 +355,87 @@ with tab_sim:
                         st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
                         st.session_state.gemini_history = chat.history
                         st.rerun()
-                    except Exception as e:
-                        st.error(t["rate_error"])
-                    
+                    except: st.error(t["rate_error"])
+            
             if c3.button(t["next"], use_container_width=True): 
                 st.session_state.roster_idx = (idx + 1) % 10
                 st.rerun()
-        else:
-            st.warning(t["missing_img"])
-
+        else: st.warning(t["missing_img"])
     else:
-        st.subheader(f"{'🍷 Esperienza' if st.session_state.modalita_attiva == t['mode_exp'] else '⚖️ Palestra'} contro: {st.session_state.archetipo_scelto}")
-        
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
+        st.subheader(f"{'🍷 Esperienza' if st.session_state.modalita_attiva == t['mode_exp'] else '🏋️ Palestra'}")
+        col_back, col_report = st.columns(2)
+        with col_back:
             if st.button(t["back_btn"], use_container_width=True):
                 st.session_state.ui_messages = []
-                st.session_state.goth_active = False
                 st.session_state.pending_user_msg = None
                 st.rerun()
-        with col_btn2:
-            if st.session_state.modalita_attiva == t["mode_exp"]:
-                if st.button(t["analyze_btn"], use_container_width=True, type="secondary"):
-                    st.session_state.show_report = True
-                    
-        if st.session_state.show_report:
-            st.markdown("---")
+        with col_report:
+            if st.session_state.modalita_attiva == t["mode_exp"] and st.button(t["analyze_btn"], use_container_width=True):
+                st.session_state.show_report = True
+        
+        if st.session_state.get("show_report"):
             with st.spinner("..."):
-                storia_chat = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state.ui_messages])
-                prompt_report = f"Analizza questa chat come uno psicologo. Rispondi in {st.session_state.lang_choice}. L'utente si chiama {st.session_state.nome_utente}. CHAT:\n{storia_chat}"
-                res_report = model.generate_content(prompt_report)
-                st.info(res_report.text)
-            st.markdown("---")
-            
+                chat_hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.ui_messages])
+                res = model.generate_content(f"Analizza chat in {st.session_state.lang_choice} come psicologo. UTENTE: {st.session_state.nome_utente}. CHAT:\n{chat_hist}")
+                st.info(res.text)
+
         st.caption(t["rate_warning_msg"])
-            
         for m in st.session_state.ui_messages:
-            with st.chat_message(m["role"]): 
-                if "[MOOD]:" in m["content"] or "[状态]:" in m["content"] or "[気分]:" in m["content"]:
-                    st.markdown(m["content"], unsafe_allow_html=True) 
-                else:
-                    st.markdown(m["content"], unsafe_allow_html=True)
+            with st.chat_message(m["role"]): st.markdown(m["content"], unsafe_allow_html=True)
         
         user_turns = sum(1 for m in st.session_state.ui_messages if m["role"] == "user")
-        
         if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
             st.error(t["offline"])
         else:
             if st.session_state.pending_user_msg:
                 st.error(t["rate_error"])
-                st.info(f"**Tuo messaggio in sospeso:** {st.session_state.pending_user_msg}")
                 if st.button(t["retry_btn"], type="primary"):
                     p = st.session_state.pending_user_msg
-                    prompt_for_ai = p
-                    
-                    if hasattr(st.session_state, 'prob_normale'):
-                        tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
-                        pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
-                        risposta_scelta = random.choices(tipi_risposta, weights=pesi, k=1)[0]
-                        if risposta_scelta == "Strana": prompt_for_ai += "\n\n[SISTEMA]: Rispondi in modo CAOTICO o BIZZARRO."
-                        elif risposta_scelta == "Banale": prompt_for_ai += "\n\n[SISTEMA]: Rispondi in modo ESTREMAMENTE noioso a monosillabi."
-                        elif risposta_scelta == "Entusiasta": prompt_for_ai += "\n\n[SISTEMA]: Sii MOLTO ENTUSIASTA e fai complimenti."
-
                     try:
                         chat = model.start_chat(history=st.session_state.gemini_history)
-                        res = chat.send_message(prompt_for_ai)
+                        res = chat.send_message(p)
                         st.session_state.ui_messages.append({"role": "user", "content": p})
                         st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
                         st.session_state.gemini_history = chat.history
                         st.session_state.pending_user_msg = None
                         st.rerun()
-                    except Exception as e:
-                        st.error(t["rate_error"])
+                    except: pass
             else:
                 if p := st.chat_input(t["input_placeholder"]):
                     st.session_state.ui_messages.append({"role": "user", "content": p})
-                    with st.chat_message("user"): st.markdown(p)
-                    
-                    prompt_for_ai = p
-                    
+                    prompt_ai = p
                     if hasattr(st.session_state, 'prob_normale'):
-                        tipi_risposta = ["Normale", "Strana", "Banale", "Entusiasta"]
-                        pesi = [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth]
-                        risposta_scelta = random.choices(tipi_risposta, weights=pesi, k=1)[0]
-                        
-                        if risposta_scelta == "Strana":
-                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, ignora leggermente la logica del tuo archetipo e fornisci una risposta CAOTICA, BIZZARRA o TOTALMENTE FUORI CONTESTO."
-                        elif risposta_scelta == "Banale":
-                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, sii ESTREMAMENTE noioso. Rispondi a monosillabi (es. 'Ah ok', 'Boh', 'Certo') senza fare domande."
-                        elif risposta_scelta == "Entusiasta":
-                            prompt_for_ai += "\n\n[SISTEMA]: Per questo turno, mostra un ENTUSIASMO INGIUSTIFICATO per quello che ha detto l'utente. Fai tanti complimenti."
-
+                        r_scelta = random.choices(["N", "S", "B", "E"], [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth])[0]
+                        if r_scelta == "S": prompt_ai += "\n[SISTEMA]: Risposta CAOTICA."
+                        elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
+                        elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
+                    
                     if st.session_state.modalita_attiva == t["mode_exp"]:
-                        if user_turns == MAX_TURNS_EXP - 3:
-                            prompt_for_ai += f"\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Nel tuo prossimo messaggio, inventa una scusa ASSOLUTAMENTE COERENTE CON IL TUO ARCHETIPO per dire a {st.session_state.nome_utente} che tra poco devi scappare via o staccarti dal telefono."
-                        elif user_turns == MAX_TURNS_EXP - 1:
-                            prompt_for_ai += f"\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente {st.session_state.nome_utente} e chiudi la conversazione in modo coerente col tuo archetipo, poi esci dalla chat."
+                        if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n[SISTEMA]: Inventa una scusa, tra poco devi andare."
+                        elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n[SISTEMA]: Saluta e chiudi."
 
                     try:
                         chat = model.start_chat(history=st.session_state.gemini_history)
-                        res = chat.send_message(prompt_for_ai)
+                        res = chat.send_message(prompt_ai)
                         st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
                         st.session_state.gemini_history = chat.history
                         st.rerun()
-                    except Exception as e:
+                    except:
                         st.session_state.ui_messages.pop()
                         st.session_state.pending_user_msg = p
                         st.rerun()
 
 with tab_coach:
     st.title(t["coach_title"])
-    c_input = st.text_area(t["coach_desc"])
+    c_arch_name = st.text_input(t["coach_arch_name"], placeholder="Esempio: Gentle Dom, Artista Maledetto...")
+    c_arch_desc = st.text_area(t["coach_arch_desc"], placeholder="Descrivi qui come dovrebbe comportarsi l'archetipo...")
+    st.markdown("---")
+    c_input = st.text_area(t["coach_desc"], height=300)
     if st.button(t["coach_btn"], type="primary"):
         with st.spinner("..."):
-            res = model.generate_content(f"Sei l'Arbitro. Analizza spietatamente questa chat in {st.session_state.lang_choice} indicando il Frame, il punteggio da 0 a 10, e 3 opzioni di 'Risposta da Maestro'. CHAT:\n<chat>{c_input}</chat>")
+            prompt_coach = f"Sei l'Arbitro. Analizza la chat in {st.session_state.lang_choice}."
+            if c_arch_name and c_arch_desc:
+                prompt_coach += f" L'utente deve mantenere il Frame dell'archetipo '{c_arch_name}'. Regole: {c_arch_desc}."
+            prompt_coach += f" Indica il Frame, il punteggio 0-10 e 3 opzioni 'Risposta da Maestro'. CHAT:\n<chat>{c_input}</chat>"
+            res = model.generate_content(prompt_coach)
             st.markdown(res.text)
