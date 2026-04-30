@@ -61,7 +61,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.16",
+        "title": "⚖️ Social Dynamics Sandbox v4.17",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -82,7 +82,7 @@ UI = {
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.16",
+        "title": "⚖️ Social Dynamics Sandbox v4.17",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -103,7 +103,7 @@ UI = {
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.16",
+        "title": "⚖️ 社交动态沙盒 v4.17",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -124,7 +124,7 @@ UI = {
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.16",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.17",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -235,7 +235,9 @@ lang_options = ["English", "Italiano", "中文", "日本語"]
 st.session_state.lang_choice = st.selectbox("🌐 Language / Lingua / 语言 / 言語", lang_options, index=lang_options.index(st.session_state.lang_choice))
 t = UI[st.session_state.lang_choice]
 desc = ARCH_DESC[st.session_state.lang_choice]
-MAX_TURNS = 20
+
+# LIMITE TURNI SOLO PER MODALITÀ ESPERIENZA (25 messaggi utente = 50 messaggi totali)
+MAX_TURNS_EXP = 25
 
 tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 
@@ -361,7 +363,6 @@ with tab_sim:
                     if goth_toggle:
                         prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Il partner appartiene alla subcultura Goth. Usa occasionalmente la formattazione HTML per colorare singole parole chiave del messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori: magenta, cyan, limegreen o red. Usa molto il *corsivo* per dare un tono drammatico."
                     
-                    # REGOLA BIO + MESSAGGIO RIPRISTINATA CORRETTAMENTE
                     prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente 2 o 3 Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]:. È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente. Fermati in attesa della risposta."
 
                     try:
@@ -400,10 +401,10 @@ with tab_sim:
             with st.chat_message(m["role"]): st.markdown(m["content"], unsafe_allow_html=True)
         
         user_turns = sum(1 for m in st.session_state.ui_messages if m["role"] == "user")
-        if user_turns >= MAX_TURNS:
+        
+        if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
             st.error(t["offline"])
         else:
-            # GESTIONE RETRY CORRETTA (MOSTRA L'ERRORE E NON SI BLOCCA IN SILENZIO)
             if st.session_state.pending_user_msg:
                 st.error(t["rate_error"])
                 if st.button(t["retry_btn"], type="primary"):
@@ -415,8 +416,9 @@ with tab_sim:
                         elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
                         elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
                     
-                    if user_turns == MAX_TURNS - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
-                    elif user_turns == MAX_TURNS - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
+                    if st.session_state.modalita_attiva == t["mode_exp"]:
+                        if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
+                        elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -439,8 +441,9 @@ with tab_sim:
                         elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
                         elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
                     
-                    if user_turns == MAX_TURNS - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
-                    elif user_turns == MAX_TURNS - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
+                    if st.session_state.modalita_attiva == t["mode_exp"]:
+                        if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
+                        elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
