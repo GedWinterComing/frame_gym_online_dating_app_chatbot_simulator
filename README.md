@@ -1,6 +1,6 @@
 ## ⚖️ Social Dynamics Sandbox (Frame-Gym Pro)
 
-Social Dynamics Sandbox is an advanced LLM-based application designed to simulate and analyze social dynamics and power structures in modern text-based dating (e.g., Tinder, Bumble, WhatsApp).
+Social Dynamics Sandbox is an advanced LLM-based application designed to simulate and analyze social dynamics and power structures in modern text-based dating (e.g., Tinder, Bumble).
 
 Built using Python, Streamlit, and the Google Gemini API, the application acts as both a roleplay simulator and an analytical coaching tool. It leverages deep prompt engineering to create highly specific behavioral archetypes and dynamic conversational constraints.
 
