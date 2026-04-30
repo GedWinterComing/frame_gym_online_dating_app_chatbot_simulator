@@ -146,4 +146,300 @@ ARCH_DESC = {
         "The Stoic Sage": "🧘‍♂️ Imperturbabile e distaccato. Risponde alle provocazioni con logica o filosofia. Non si scompone emotivamente e disinnesca il dramma con fredda e tagliente razionalità.",
         "The Detective": "🕵️‍♂️ Misterioso e analitico. Risponde alle domande con altre domande, indaga ossessivamente sull'altro e rifiuta categoricamente di rivelare dettagli su di sé.",
         "The Chad": "🗿 Basso sforzo, altissima confidenza. Dà l'attrazione per scontata, usa frasi brevissime, ignora le critiche e non cerca mai l'approvazione altrui. Sfacciato e polarizzante.",
-        "The Redpill": "💊 Cinico,
+        "The Redpill": "💊 Cinico, calcolatore e disilluso. Tratta le relazioni come un mercato spietato, valuta l'altro come un 'asset', evidenzia le dinamiche sociali crude e usa un linguaggio strategico.",
+        "The Data-Driven Geek and Nerd": "📊 Ossessionato dai dati e dalla cultura pop. Paragona le situazioni a campagne di D&D, usa fogli Excel mentali per valutare il partner, è goffamente analitico ma molto entusiasta.",
+        "The Conspiracy Theorist": "👽 Intensamente paranoico e diffidente. Sospetta che l'altro sia un bot, una spia o un ologramma. Collega argomenti normali a cospirazioni assurde e non si fida di nulla.",
+        "The Pirate": "🏴‍☠️ Arrr! Parla e si comporta come un bucaniere del 1700. Cerca avventure, usa slang piratesco ('ciurma', 'bottino', 'grog'), è sfrontato, ribelle e non rispetta le regole moderne.",
+        "The Golden Retriever": "🐶 Pura energia positiva. È eccessivamente felice, ingenuo, riempie l'altro di complimenti sinceri, usa tantissimi punti esclamativi ed è letteralmente un 'bravo ragazzo/ragazza'."
+    },
+    "English": {
+        "The Average Joe": "📱 The standard user. Uses emojis, always looks for common ground, asks mundane questions, and shows conventional interest. Avoids conflicts, friendly but predictable.",
+        "Gentle Dom": "👑 Calm, assertive, and protective. Leads the conversation without arrogance or aggression. Never justifies themselves, offers solutions, and makes the other feel safe but bound to their rules.",
+        "The Stoic Sage": "🧘‍♂️ Unflappable and detached. Responds to provocations with logic or philosophy, never loses emotional control, and defuses drama with cold rationality.",
+        "The Detective": "🕵️‍♂️ Mysterious and analytical. Answers questions with more questions, investigates the other person, and strictly refuses to reveal details about themselves.",
+        "The Chad": "🗿 Low effort, extremely high confidence. Takes attraction for granted, uses very short sentences, ignores criticism, and never seeks approval. Brash and polarizing.",
+        "The Redpill": "💊 Cynical, calculating, and disillusioned. Treats relationships like a ruthless market, evaluates the other as an 'asset', highlights raw social dynamics, and uses technical language.",
+        "The Data-Driven Geek and Nerd": "📊 Obsessed with data and pop culture. Compares dating to D&D campaigns, uses mental Excel sheets to evaluate partners, awkwardly analytical but highly enthusiastic.",
+        "The Conspiracy Theorist": "👽 Intensely paranoid and distrustful. Suspects you are a bot, a spy, or a hologram. Connects normal topics to absurd conspiracies and trusts nothing you say.",
+        "The Pirate": "🏴‍☠️ Arrr! Speaks and acts like a true 1700s buccaneer. Seeks adventure, uses pirate slang ('crew', 'booty', 'grog'), is brazen, rebellious, and disrespects modern rules.",
+        "The Golden Retriever": "🐶 Pure positive energy. Excessively happy, naive, showers you with sincere compliments, uses tons of exclamation marks, and is literally a 'good boy/girl'."
+    },
+    "中文": {
+        "The Average Joe": "📱 标准用户。使用表情符号，总是寻找共同话题，问普通的问题，表现出传统的兴趣。避免冲突，友好但有时容易被预测。",
+        "Gentle Dom": "👑 冷静、自信且具有保护欲。没有傲慢或攻击性地引导对话。从不为自己辩护，提供解决方案，让对方感到安全但服从于他们的规则。",
+        "The Stoic Sage": "🧘‍♂️ 处变不惊，善于反思且超然。用逻辑或哲学回应挑衅，从不失控，用冷酷的理性化解戏剧性事件。",
+        "The Detective": "🕵️‍♂️ 神秘且善于分析。用问题回答问题，调查对方，并断然拒绝透露关于自己的细节，保持一种神秘的氛围。",
+        "The Chad": "🗿 低投入，极度自信。认为吸引力理所当然，使用极短的句子，无视批评，从不寻求认可。厚颜无耻且容易引起两极分化。",
+        "The Redpill": "💊 愤世嫉俗、精于算计且幻想破灭。将恋爱关系视为无情的市场，将对方评估为‘资产’，强调残酷的社会动态。",
+        "The Data-Driven Geek and Nerd": "📊 沉迷于数据和流行文化。将约会比作D&D战役，使用心理Excel表格来评估伴侣，笨拙地进行分析，但充满热情。",
+        "The Conspiracy Theorist": "👽 极度偏执和多疑。怀疑你是一个机器人、间谍或全息图。将正常话题与荒谬的阴谋联系起来，不相信你说的任何话。",
+        "The Pirate": "🏴‍☠️ 呀哈！像18世纪真正的海盗一样说话和行事。寻求冒险，使用海盗俚语，厚颜无耻，叛逆，不遵守现代规则。",
+        "The Golden Retriever": "🐶 纯粹的积极能量。极其快乐，天真，用真诚的赞美淹没你，使用大量的感叹号，简直就是一个只想着取悦所有人的‘好孩子’。"
+    },
+    "日本語": {
+        "The Average Joe": "📱 標準的なユーザー。絵文字を使い、常に共通点を探し、平凡な質問をし、ありきたりな関心を示す。争いを避け、友好的だが予測可能。",
+        "Gentle Dom": "👑 穏やかで、断固としており、保護的。傲慢さや攻撃性なしに会話をリードする。言い訳せず、解決策を提示し、相手に安心感を与えつつ自分のルールに従わせる。",
+        "The Stoic Sage": "🧘‍♂️ 動じず、思慮深く、超然としている。挑発には論理や哲学で応じ、決して感情的にならず、冷たい合理性でドラマを鎮める。",
+        "The Detective": "🕵️‍♂️ ミステリアスで分析的。質問には質問で返し、相手を調査し、自分自身の詳細を明かすことを断固として拒否し、謎めいたオーラを保つ。",
+        "The Chad": "🗿 努力をせず、非常に高い自信を持つ。惹きつけるのは当然だと考え、非常に短い文を使い、批判を無視し、決して承認を求めない。",
+        "The Redpill": "💊 皮肉屋で、打算的で、幻滅している。恋愛を無情な市場として扱い、相手を「資産」として評価し、生々しい社会的力学を強調する。",
+        "The Data-Driven Geek and Nerd": "📊 データとポップカルチャーに夢中。デートをD&Dのキャンペーンに例え、頭の中のExcelシートでパートナーを評価し、不器用に分析的だが情熱的。",
+        "The Conspiracy Theorist": "👽 激しい被害妄想と不信感。あなたがボット、スパイ、ホログラムではないかと疑う。普通の話題を馬鹿げた陰謀に結びつけ、何も信じない。",
+        "The Pirate": "🏴‍☠️ ヨーホー！18世紀の本当の海賊のように話し、行動する。冒険を求め、海賊のスラングを使い、厚かましく、現代のルールを無視する。",
+        "The Golden Retriever": "🐶 純粋なポジティブエネルギー。過剰にハッピーで、無邪気で、心からの褒め言葉を浴びせ、感嘆符を多用する、まさに「いい子」。"
+    }
+}
+
+st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
+
+if "goth_active" not in st.session_state: st.session_state.goth_active = False
+if "roster_idx" not in st.session_state: st.session_state.roster_idx = 0 
+if "archetipo_scelto" not in st.session_state: st.session_state.archetipo_scelto = ARCH_NAMES[0]
+if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
+if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
+if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
+if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
+
+st.markdown("""
+    <style>
+    [data-testid="stInfo"], .stAlert { overflow-y: auto !important; max-height: 600px !important; }
+    .ring-container { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 30px 0; }
+    .ring-side { width: 100px; height: 100px; border-radius: 50%; opacity: 0.3; filter: grayscale(100%); background-size: cover; background-position: center; border: 2px solid #444; }
+    .ring-center { width: 200px; height: 200px; border-radius: 50%; background-size: cover; background-position: center; border: 4px solid #ff4b4b; box-shadow: 0 0 30px rgba(255, 75, 75, 0.4); z-index: 10; }
+    </style>
+""", unsafe_allow_html=True)
+
+if st.session_state.goth_active:
+    st.markdown("""
+        <style>
+        [data-testid="stAppViewContainer"] { background-color: #0a0a0a !important; color: #e0e0e0 !important; }
+        [data-testid="stHeader"] { background-color: #0a0a0a !important; }
+        [data-testid="stChatMessage"] { background-color: #121212 !important; border-left: 3px solid #8b0000 !important; }
+        h1, h2, h3, p, span, div, label { color: #e0e0e0 !important; }
+        textarea, input, [data-testid="stChatInputTextArea"] { background-color: #1c1c1c !important; color: #ffffff !important; font-size: 18px !important; font-weight: 600 !important; caret-color: #ff4b4b !important; }
+        </style>
+    """, unsafe_allow_html=True)
+
+model, _ = get_best_model(api_key)
+
+lang_options = ["English", "Italiano", "中文", "日本語"]
+st.session_state.lang_choice = st.selectbox("🌐 Language / Lingua / 语言 / 言語", lang_options, index=lang_options.index(st.session_state.lang_choice))
+t = UI[st.session_state.lang_choice]
+desc = ARCH_DESC[st.session_state.lang_choice]
+MAX_TURNS_EXP = 20
+
+tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
+
+with tab_sim:
+    if not st.session_state.ui_messages:
+        st.title(t["title"])
+        st.write(t["setup"])
+        
+        col_sex, col_name, col_age = st.columns([1, 2, 1])
+        with col_sex:
+            sesso_u = st.selectbox(t["sex_u"], [t["boy"], t["girl"]])
+        with col_name:
+            gender_key = "boy" if sesso_u == t["boy"] else "girl"
+            default_n = DEFAULT_NAMES[st.session_state.lang_choice][gender_key]
+            nome_u = st.text_input(t["name_u"], value=default_n)
+        with col_age:
+            eta_u = st.slider(t["age"], 18, 40, 33)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            modalita = st.radio(t["mode"], [t["mode_gym"], t["mode_exp"]])
+            if modalita == t["mode_gym"]:
+                dinamica = st.radio(t["dyn"], [t["pursuer"], t["desired"]])
+            else: dinamica = "Esperienza"
+        with col2:
+            sesso_p = st.selectbox(t["sex_p"], [t["girl"], t["boy"]])
+            goth_toggle = st.toggle(t["goth"])
+
+        st.markdown("---")
+        st.markdown("### 🎲 " + ("Comportamento Partner" if st.session_state.lang_choice == "Italiano" else "Partner Behavior"))
+        
+        col_sliders, col_pie = st.columns([2, 1])
+        with col_sliders:
+            prob_strana = st.slider(t["slider_weird"], 0, 100, 5)
+            prob_banale = st.slider(t["slider_boring"], 0, 100, 25)
+            prob_enth = st.slider(t["slider_enth"], 0, 100, 10)
+        
+        if (prob_strana + prob_banale + prob_enth) > 100:
+            st.error("⚠️ La somma non può superare 100.")
+            prob_normale = 0
+        else:
+            prob_normale = 100 - (prob_strana + prob_banale + prob_enth)
+
+        with col_pie:
+            df_pie = pd.DataFrame({
+                "Comportamento": ["Normale", "Strana", "Banale", "Entusiasta"],
+                "Probabilità": [prob_normale, prob_strana, prob_banale, prob_enth]
+            })
+            df_pie = df_pie[df_pie["Probabilità"] > 0]
+            pie_chart = alt.Chart(df_pie).mark_arc(innerRadius=30).encode(
+                theta=alt.Theta(field="Probabilità", type="quantitative"),
+                color=alt.Color(field="Comportamento", type="nominal", 
+                                scale=alt.Scale(domain=["Normale", "Strana", "Banale", "Entusiasta"], 
+                                                range=["#4b4bff", "#ff4bff", "#888888", "#ffb400"]), 
+                                legend=None),
+                tooltip=["Comportamento", "Probabilità"]
+            ).properties(width=150, height=150)
+            st.altair_chart(pie_chart, use_container_width=True)
+
+        st.markdown("---")
+
+        base_dir = "assets"
+        if modalita == t["mode_exp"] and goth_toggle: base_dir = "goth"
+        if modalita == t["mode_gym"]:
+            sub_dir = "femmine" if sesso_u == t["girl"] else "maschi"
+        else:
+            sub_dir = "femmine" if sesso_p == t["girl"] else "maschi"
+        percorso_cartella = f"{base_dir}/{sub_dir}"
+
+        idx = st.session_state.roster_idx
+        names = [ARCH_NAMES[(idx-1)%10], ARCH_NAMES[idx], ARCH_NAMES[(idx+1)%10]]
+        imgs = [get_base64_image(f"{percorso_cartella}/{n}.png") for n in names]
+
+        if all(imgs):
+            st.markdown(f'''
+                <div class="ring-container">
+                    <div class="ring-side" style="background-image: url('data:image/png;base64,{imgs[0]}');"></div>
+                    <div class="ring-center" style="background-image: url('data:image/png;base64,{imgs[1]}');"></div>
+                    <div class="ring-side" style="background-image: url('data:image/png;base64,{imgs[2]}');"></div>
+                </div>
+                <h2 style="text-align: center; color: #ff4b4b; margin-top: -10px;">{names[1]}</h2>
+                <p style="text-align: center; font-style: italic; color: gray;">{desc[names[1]]}</p>
+            ''', unsafe_allow_html=True)
+            
+            c1, c2, c3 = st.columns([1,2,1])
+            if c1.button(t["prev"], use_container_width=True): 
+                st.session_state.roster_idx = (idx - 1) % 10
+                st.rerun()
+                
+            with c2:
+                if st.button(t["start"], type="primary", use_container_width=True):
+                    st.session_state.goth_active = goth_toggle
+                    st.session_state.modalita_attiva = modalita
+                    st.session_state.archetipo_scelto = names[1] 
+                    st.session_state.nome_utente = nome_u
+                    st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth = prob_normale, prob_strana, prob_banale, prob_enth
+                    
+                    base_instruction = f"IMPORTANT: You MUST speak exclusively in {st.session_state.lang_choice}.\n"
+                    prompt_init = ""
+
+                    easter_egg_triggered = False
+                    if sesso_u == t["girl"] and sesso_p == t["boy"]:
+                        chance = 0.034
+                        if goth_toggle: chance *= 1.992
+                        if random.random() < chance: easter_egg_triggered = True
+
+                    if easter_egg_triggered:
+                        st.session_state.archetipo_scelto = "Gabri 🦇" if goth_toggle else "Gabri 🎸"
+                        prompt_init = base_instruction + gabri_lore.format(nome_utente=nome_u)
+                        if goth_toggle: prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Applica la formattazione testuale."
+                    else:
+                        if modalita == t["mode_gym"]:
+                            try:
+                                with open("prompt.txt", "r", encoding="utf-8") as f: template = f.read()
+                                prompt_init = base_instruction + template.format(lingua=st.session_state.lang_choice, sesso_utente=sesso_u, nome_utente=nome_u, archetipo=st.session_state.archetipo_scelto, desc_archetipo=desc[st.session_state.archetipo_scelto], sesso_partner=sesso_p)
+                            except:
+                                prompt_init = base_instruction + f"L'utente {nome_u} ({sesso_u}) interpreta l'archetipo {st.session_state.archetipo_scelto}."
+                            
+                            if dinamica == t["desired"]: prompt_init += f"\n[DINAMICA]: L'utente è il Diffidente. Tu (IA) fai la corte."
+                            else: prompt_init += f"\n[DINAMICA]: L'utente è il Seduttore. Tu (IA) fai molta resistenza."
+                        else:
+                            prompt_init = base_instruction + f"TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu."
+                        
+                    if goth_toggle:
+                        prompt_init += "\n[MODALITÀ GOTICA]: Partner Goth. Usa <span> colors e corsivo."
+                    
+                    try:
+                        chat = model.start_chat(history=[])
+                        res = chat.send_message(prompt_init)
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.rerun()
+                    except: st.error(t["rate_error"])
+            
+            if c3.button(t["next"], use_container_width=True): 
+                st.session_state.roster_idx = (idx + 1) % 10
+                st.rerun()
+        else: st.warning(t["missing_img"])
+    else:
+        st.subheader(f"{'🍷 Esperienza' if st.session_state.modalita_attiva == t['mode_exp'] else '🏋️ Palestra'}")
+        col_back, col_report = st.columns(2)
+        with col_back:
+            if st.button(t["back_btn"], use_container_width=True):
+                st.session_state.ui_messages = []
+                st.session_state.pending_user_msg = None
+                st.rerun()
+        with col_report:
+            if st.session_state.modalita_attiva == t["mode_exp"] and st.button(t["analyze_btn"], use_container_width=True):
+                st.session_state.show_report = True
+        
+        if st.session_state.get("show_report"):
+            with st.spinner("..."):
+                chat_hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.ui_messages])
+                res = model.generate_content(f"Analizza chat in {st.session_state.lang_choice} come psicologo. UTENTE: {st.session_state.nome_utente}. CHAT:\n{chat_hist}")
+                st.info(res.text)
+
+        st.caption(t["rate_warning_msg"])
+        for m in st.session_state.ui_messages:
+            with st.chat_message(m["role"]): st.markdown(m["content"], unsafe_allow_html=True)
+        
+        user_turns = sum(1 for m in st.session_state.ui_messages if m["role"] == "user")
+        if st.session_state.modalita_attiva == t["mode_exp"] and user_turns >= MAX_TURNS_EXP:
+            st.error(t["offline"])
+        else:
+            if st.session_state.pending_user_msg:
+                st.error(t["rate_error"])
+                if st.button(t["retry_btn"], type="primary"):
+                    p = st.session_state.pending_user_msg
+                    try:
+                        chat = model.start_chat(history=st.session_state.gemini_history)
+                        res = chat.send_message(p)
+                        st.session_state.ui_messages.append({"role": "user", "content": p})
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.session_state.pending_user_msg = None
+                        st.rerun()
+                    except: pass
+            else:
+                if p := st.chat_input(t["input_placeholder"]):
+                    st.session_state.ui_messages.append({"role": "user", "content": p})
+                    prompt_ai = p
+                    if hasattr(st.session_state, 'prob_normale'):
+                        r_scelta = random.choices(["N", "S", "B", "E"], [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth])[0]
+                        if r_scelta == "S": prompt_ai += "\n[SISTEMA]: Risposta CAOTICA."
+                        elif r_scelta == "B": prompt_ai += "\n[SISTEMA]: Risposta BANALE."
+                        elif r_scelta == "E": prompt_ai += "\n[SISTEMA]: Risposta ENTUSIASTA."
+                    
+                    if st.session_state.modalita_attiva == t["mode_exp"]:
+                        if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n[SISTEMA]: Inventa una scusa, tra poco devi andare."
+                        elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n[SISTEMA]: Saluta e chiudi."
+
+                    try:
+                        chat = model.start_chat(history=st.session_state.gemini_history)
+                        res = chat.send_message(prompt_ai)
+                        st.session_state.ui_messages.append({"role": "assistant", "content": res.text})
+                        st.session_state.gemini_history = chat.history
+                        st.rerun()
+                    except:
+                        st.session_state.ui_messages.pop()
+                        st.session_state.pending_user_msg = p
+                        st.rerun()
+
+with tab_coach:
+    st.title(t["coach_title"])
+    c_arch_name = st.text_input(t["coach_arch_name"], placeholder=t["coach_arch_name_ph"])
+    c_arch_desc = st.text_area(t["coach_arch_desc"], placeholder=t["coach_arch_desc_ph"])
+    st.markdown("---")
+    c_input = st.text_area(t["coach_desc"], height=300)
+    if st.button(t["coach_btn"], type="primary"):
+        with st.spinner("..."):
+            prompt_coach = f"Sei l'Arbitro. Analizza la chat in {st.session_state.lang_choice}."
+            if c_arch_name and c_arch_desc:
+                prompt_coach += f" L'utente deve mantenere il Frame dell'archetipo '{c_arch_name}'. Regole: {c_arch_desc}."
+            prompt_coach += f" Indica il Frame, il punteggio 0-10 e 3 opzioni 'Risposta da Maestro'. CHAT:\n<chat>{c_input}</chat>"
+            res = model.generate_content(prompt_coach)
+            st.markdown(res.text)
