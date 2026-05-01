@@ -7,6 +7,9 @@ import pandas as pd
 import altair as alt
 from dotenv import load_dotenv
 
+# Deve essere sempre il primo comando Streamlit!
+st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
+
 # --- CARICAMENTO VARIABILI E GESTIONE LOCALE/CLOUD ---
 load_dotenv()
 
@@ -14,6 +17,37 @@ try:
     api_key = st.secrets["GEMINI_API_KEY"]
 except Exception:
     api_key = os.getenv("GEMINI_API_KEY")
+
+# --- SISTEMA DI LOGIN (PROTEZIONE API) ---
+def check_password():
+    """Ritorna True se la password inserita è corretta, altrimenti ferma l'app."""
+    if "password_correct" not in st.session_state:
+        st.session_state["password_correct"] = False
+
+    if not st.session_state["password_correct"]:
+        st.title("🔒 Accesso Riservato")
+        st.write("Questa applicazione è protetta. Inserisci la password per accedere al Simulatore.")
+        
+        pwd = st.text_input("Password", type="password")
+        
+        # Recupera la password dai segreti (o usa una di default se manca)
+        try:
+            secret_pwd = st.secrets["APP_PASSWORD"]
+        except Exception:
+            secret_pwd = os.getenv("APP_PASSWORD", "admin")
+            
+        if st.button("Entra"):
+            if pwd == secret_pwd:
+                st.session_state["password_correct"] = True
+                st.rerun()
+            else:
+                st.error("❌ Password errata.")
+        return False
+    return True
+
+# Se la password non è corretta, l'app si ferma qui. Niente spreco di token!
+if not check_password():
+    st.stop()
 
 try:
     gabri_lore = st.secrets["GABRI_LORE"]
@@ -61,7 +95,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.17",
+        "title": "⚖️ Social Dynamics Sandbox v4.18",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -82,7 +116,7 @@ UI = {
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.17",
+        "title": "⚖️ Social Dynamics Sandbox v4.18",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -103,7 +137,7 @@ UI = {
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.17",
+        "title": "⚖️ 社交动态沙盒 v4.18",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -124,7 +158,7 @@ UI = {
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.17",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.18",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -198,8 +232,6 @@ ARCH_DESC = {
         "The Golden Retriever": "🐶 純粋なポジティブエネルギー。過剰にハッピーで、無邪気で、心からの褒め言葉を浴びせ、感嘆符を多用する、まさに「いい子」。"
     }
 }
-
-st.set_page_config(page_title="Frame-Gym Pro", page_icon="⚖️", layout="centered")
 
 if "goth_active" not in st.session_state: st.session_state.goth_active = False
 if "roster_idx" not in st.session_state: st.session_state.roster_idx = 0 
