@@ -20,7 +20,6 @@ except Exception:
 
 # --- SISTEMA DI LOGIN (PROTEZIONE API) ---
 def check_password():
-    """Ritorna True se la password inserita è corretta, altrimenti ferma l'app."""
     if "password_correct" not in st.session_state:
         st.session_state["password_correct"] = False
 
@@ -30,7 +29,6 @@ def check_password():
         
         pwd = st.text_input("Password", type="password")
         
-        # Recupera la password dai segreti (o usa una di default se manca)
         try:
             secret_pwd = st.secrets["APP_PASSWORD"]
         except Exception:
@@ -45,7 +43,6 @@ def check_password():
         return False
     return True
 
-# Se la password non è corretta, l'app si ferma qui. Niente spreco di token!
 if not check_password():
     st.stop()
 
@@ -95,7 +92,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.18",
+        "title": "⚖️ Social Dynamics Sandbox v4.20",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -116,7 +113,7 @@ UI = {
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.18",
+        "title": "⚖️ Social Dynamics Sandbox v4.20",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -137,7 +134,7 @@ UI = {
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.18",
+        "title": "⚖️ 社交动态沙盒 v4.20",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -158,7 +155,7 @@ UI = {
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.18",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.20",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -418,14 +415,20 @@ with tab_sim:
                 st.session_state.ui_messages = []
                 st.session_state.pending_user_msg = None
                 st.rerun()
+        
+        # IL TASTO ANALISI COMPARE ORA SOLO NELLA MODALITÀ ESPERIENZA
         with col_report:
             if st.session_state.modalita_attiva == t["mode_exp"] and st.button(t["analyze_btn"], use_container_width=True):
                 st.session_state.show_report = True
         
-        if st.session_state.get("show_report"):
+        # LOGICA REPORT (SOLO PER L'ESPERIENZA)
+        if st.session_state.get("show_report") and st.session_state.modalita_attiva == t["mode_exp"]:
             with st.spinner("..."):
                 chat_hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.ui_messages])
-                res = model.generate_content(f"Analizza chat in {st.session_state.lang_choice} come psicologo. UTENTE: {st.session_state.nome_utente}. CHAT:\n{chat_hist}")
+                prompt_report = f"Analizza la seguente chat in {st.session_state.lang_choice} come uno psicologo ed esperto di dinamiche relazionali. L'UTENTE è: {st.session_state.nome_utente}.\n\n"
+                prompt_report += "MODALITÀ ESPERIENZA: Valuta come l'utente ha reagito all'archetipo dell'IA. Fornisci consigli psicologici dettagliati sui frame della chat.\n"
+                prompt_report += f"\nCHAT DA ANALIZZARE:\n{chat_hist}"
+                res = model.generate_content(prompt_report)
                 st.info(res.text)
 
         st.caption(t["rate_warning_msg"])
@@ -451,6 +454,10 @@ with tab_sim:
                     if st.session_state.modalita_attiva == t["mode_exp"]:
                         if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
+                    
+                    # REGOLA MATEMATICA GAME OVER IN PALESTRA
+                    elif st.session_state.modalita_attiva == t["mode_gym"]:
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 40) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -476,6 +483,10 @@ with tab_sim:
                     if st.session_state.modalita_attiva == t["mode_exp"]:
                         if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
+                    
+                    # REGOLA MATEMATICA GAME OVER IN PALESTRA
+                    elif st.session_state.modalita_attiva == t["mode_gym"]:
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 40) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -500,6 +511,7 @@ with tab_coach:
             prompt_coach = f"Sei l'Arbitro. Analizza la chat in {st.session_state.lang_choice}."
             if c_arch_name and c_arch_desc:
                 prompt_coach += f" L'utente deve mantenere il Frame dell'archetipo '{c_arch_name}'. Regole: {c_arch_desc}."
-            prompt_coach += f" Indica il Frame, il punteggio 0-10 e 3 opzioni 'Risposta da Maestro'. CHAT:\n<chat>{c_input}</chat>"
+            # REGOLE MATEMATICHE BLINDATE PER LA "CHAT DA MAESTRO" IN COACH ROOM
+            prompt_coach += f" Indica il Frame e un punteggio da 0 a 10. INFINE, è ASSOLUTAMENTE OBBLIGATORIO generare una 'Chat da Maestro' completa di ESATTAMENTE 50 messaggi totali (25 scambi completi botta e risposta, numerati rigorosamente da 1 a 50) per mostrare l'esecuzione perfetta. NON riassumere, NON usare puntini di sospensione e NON fermarti a 9 scambi. Scrivi tutti e 50 i messaggi per intero. CHAT:\n<chat>{c_input}</chat>"
             res = model.generate_content(prompt_coach)
             st.markdown(res.text)
