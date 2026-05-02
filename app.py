@@ -78,7 +78,16 @@ def get_best_model(api_key):
         if not modelli_validi: return None, None
         model_name = next((m for m in modelli_validi if 'flash' in m.lower()), modelli_validi[0])
         config = genai.GenerationConfig(max_output_tokens=8192, temperature=0.7)
-        return genai.GenerativeModel(model_name, generation_config=config), model_name
+        
+        # --- NUOVI PARAMETRI DI SICUREZZA SBLOCCATI (MAX LIBERTÀ) ---
+        safety_settings = [
+            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
+        ]
+        
+        return genai.GenerativeModel(model_name, generation_config=config, safety_settings=safety_settings), model_name
     except Exception:
         return None, None
 
