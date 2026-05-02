@@ -495,7 +495,7 @@ with tab_sim:
                     
                     # REGOLA MATEMATICA GAME OVER IN PALESTRA
                     elif st.session_state.modalita_attiva == t["mode_gym"]:
-                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 40) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 80 messaggi totali (40 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 80) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
