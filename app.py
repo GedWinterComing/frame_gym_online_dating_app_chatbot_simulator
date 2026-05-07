@@ -102,6 +102,7 @@ DEFAULT_NAMES = {
 UI = {
     "Italiano": {
         "title": "⚖️ Social Dynamics Sandbox v4.20",
+        "age_warning": "🔞 **ATTENZIONE:** Questa app esplora dinamiche relazionali adulte e può contenere temi espliciti/NSFW. Devi essere maggiorenne (18+) per utilizzarla.",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
         "boy": "Ragazzo", "girl": "Ragazza", "goth": "🦇 Gothificatore",
@@ -123,6 +124,7 @@ UI = {
     },
     "English": {
         "title": "⚖️ Social Dynamics Sandbox v4.20",
+        "age_warning": "🔞 **WARNING:** This app explores adult relationship dynamics and may contain explicit/NSFW themes. You must be 18+ to use it.",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
         "boy": "Boy", "girl": "Girl", "goth": "🦇 Goth Mode",
@@ -144,6 +146,7 @@ UI = {
     },
     "中文": {
         "title": "⚖️ 社交动态沙盒 v4.20",
+        "age_warning": "🔞 **警告：** 此应用探索成人关系动态，可能包含露骨/NSFW主题。您必须年满18岁才能使用。",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
         "boy": "男生", "girl": "女生", "goth": "🦇 哥特模式",
@@ -165,6 +168,7 @@ UI = {
     },
     "日本語": {
         "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.20",
+        "age_warning": "🔞 **警告:** このアプリは大人の恋愛ダイナミクスを探求しており、露骨な/NSFWなテーマを含む可能性があります。18歳以上である必要があります。",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
         "boy": "男性", "girl": "女性", "goth": "🦇 ゴスモード",
@@ -186,7 +190,19 @@ UI = {
     }
 }
 
-ARCH_NAMES = ["The Average Joe", "Gentle Dom", "The Stoic Sage", "The Detective", "The Chad", "The Redpill", "The Data-Driven Geek and Nerd", "The Conspiracy Theorist", "The Pirate", "The Golden Retriever"]
+# --- NUOVO ORDINE ARCHETIPI ---
+ARCH_NAMES = [
+    "The Average Joe", 
+    "The Stoic Sage", 
+    "The Detective", 
+    "The Chad", 
+    "The Redpill", 
+    "The Data-Driven Geek and Nerd",  
+    "Gentle Dom", 
+    "The Golden Retriever", 
+    "The Conspiracy Theorist", 
+    "The Pirate"
+]
 
 ARCH_DESC = {
     "Italiano": {
@@ -282,6 +298,9 @@ tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 with tab_sim:
     if not st.session_state.ui_messages:
         st.title(t["title"])
+        # AVVISO 18+ AGGIUNTO QUI SOTTO AL TITOLO
+        st.warning(t["age_warning"])
+        
         st.write(t["setup"])
         
         col_sex, col_name, col_age = st.columns([1, 2, 1])
@@ -399,7 +418,7 @@ with tab_sim:
                             prompt_init = base_instruction + f"TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu."
                         
                     if goth_toggle:
-                        prompt_init += "\n[MODALITÀ GOTICA ATTIVA]: Il partner appartiene alla subcultura Goth. Usa occasionalmente la formattazione HTML per colorare singole parole chiave del messaggio (es. <span style='color:magenta'>parola</span>), scegliendo tra i colori: magenta, cyan, limegreen o red. Usa molto il *corsivo* per dare un tono drammatico."
+                        prompt_init += "\n[MODALITÀ GOTICA ATTIVA - REGOLA COLORI TASSATIVA]: Il partner è Goth. DEVI usare la formattazione HTML per colorare almeno 1 o 2 parole chiave in OGNI tuo [MESSAGGIO] (es. <span style='color:magenta'>oscurità</span>). Usa SOLO: magenta, cyan, limegreen, red. Usa molto il *corsivo*."
                     
                     prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente 2 o 3 Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]:. È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente. Fermati in attesa della risposta."
 
@@ -425,12 +444,10 @@ with tab_sim:
                 st.session_state.pending_user_msg = None
                 st.rerun()
         
-        # IL TASTO ANALISI COMPARE ORA SOLO NELLA MODALITÀ ESPERIENZA
         with col_report:
             if st.session_state.modalita_attiva == t["mode_exp"] and st.button(t["analyze_btn"], use_container_width=True):
                 st.session_state.show_report = True
         
-        # LOGICA REPORT (SOLO PER L'ESPERIENZA)
         if st.session_state.get("show_report") and st.session_state.modalita_attiva == t["mode_exp"]:
             with st.spinner("..."):
                 chat_hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.ui_messages])
@@ -454,6 +471,10 @@ with tab_sim:
                 if st.button(t["retry_btn"], type="primary"):
                     p = st.session_state.pending_user_msg
                     prompt_ai = p
+                    
+                    if st.session_state.goth_active:
+                        prompt_ai += "\n[SISTEMA]: RICORDA LA REGOLA GOTICA! Devi colorare 1 o 2 parole nel [MESSAGGIO] usando i tag HTML es. <span style='color:magenta'>parola</span>."
+
                     if hasattr(st.session_state, 'prob_normale'):
                         r_scelta = random.choices(["N", "S", "B", "E"], [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth])[0]
                         if r_scelta == "S": prompt_ai += "\n[SISTEMA]: Risposta CAOTICA."
@@ -464,9 +485,8 @@ with tab_sim:
                         if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
                     
-                    # REGOLA MATEMATICA GAME OVER IN PALESTRA
                     elif st.session_state.modalita_attiva == t["mode_gym"]:
-                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 80 messaggi totali (40 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 80) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 40) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -483,6 +503,10 @@ with tab_sim:
                 if p := st.chat_input(t["input_placeholder"]):
                     st.session_state.ui_messages.append({"role": "user", "content": p})
                     prompt_ai = p
+                    
+                    if st.session_state.goth_active:
+                        prompt_ai += "\n[SISTEMA]: RICORDA LA REGOLA GOTICA! Devi colorare 1 o 2 parole nel [MESSAGGIO] usando i tag HTML es. <span style='color:magenta'>parola</span>."
+
                     if hasattr(st.session_state, 'prob_normale'):
                         r_scelta = random.choices(["N", "S", "B", "E"], [st.session_state.prob_normale, st.session_state.prob_strana, st.session_state.prob_banale, st.session_state.prob_enth])[0]
                         if r_scelta == "S": prompt_ai += "\n[SISTEMA]: Risposta CAOTICA."
@@ -493,9 +517,8 @@ with tab_sim:
                         if user_turns == MAX_TURNS_EXP - 3: prompt_ai += "\n\n[SISTEMA]: Mancano 2 messaggi alla fine. Inventa una scusa assolutamente coerente con il tuo ruolo per dire che tra poco devi scappare via."
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
                     
-                    # REGOLA MATEMATICA GAME OVER IN PALESTRA
                     elif st.session_state.modalita_attiva == t["mode_gym"]:
-                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 80 messaggi totali (40 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 80) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 40) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -520,7 +543,7 @@ with tab_coach:
             prompt_coach = f"Sei l'Arbitro. Analizza la chat in {st.session_state.lang_choice}."
             if c_arch_name and c_arch_desc:
                 prompt_coach += f" L'utente deve mantenere il Frame dell'archetipo '{c_arch_name}'. Regole: {c_arch_desc}."
-            # REGOLE MATEMATICHE BLINDATE PER LA "CHAT DA MAESTRO" IN COACH ROOM
-            prompt_coach += f" Indica il Frame e un punteggio da 0 a 10. INFINE, è ASSOLUTAMENTE OBBLIGATORIO generare una 'Chat da Maestro' completa di ESATTAMENTE 50 messaggi totali (25 scambi completi botta e risposta, numerati rigorosamente da 1 a 50) per mostrare l'esecuzione perfetta. NON riassumere, NON usare puntini di sospensione e NON fermarti a 9 scambi. Scrivi tutti e 50 i messaggi per intero. CHAT:\n<chat>{c_input}</chat>"
+            
+            prompt_coach += f" Indica il Frame e un punteggio da 0 a 10. INFINE, è ASSOLUTAMENTE OBBLIGATORIO generare una 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi completi botta e risposta, numerati rigorosamente da 1 a 40) per mostrare l'esecuzione perfetta. NON riassumere, NON usare puntini di sospensione. Scrivi tutti i 40 messaggi per intero. CHAT:\n<chat>{c_input}</chat>"
             res = model.generate_content(prompt_coach)
             st.markdown(res.text)
