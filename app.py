@@ -101,7 +101,7 @@ DEFAULT_NAMES = {
 
 UI = {
     "Italiano": {
-        "title": "⚖️ Social Dynamics Sandbox v4.21",
+        "title": "⚖️ Social Dynamics Sandbox v4.22",
         "age_warning": "🔞 **ATTENZIONE:** Questa app esplora dinamiche relazionali adulte e può contenere temi espliciti/NSFW. Devi essere maggiorenne (18+) per utilizzarla.",
         "tab_sim": "🎮 Simulatore", "tab_coach": "🧠 Coach Room",
         "setup": "Configura la tua partita:", "name_u": "Il Tuo Nome", "sex_u": "👤 Il tuo sesso", "age": "🎂 Tua Età",
@@ -123,7 +123,7 @@ UI = {
         "coach_arch_name_ph": "Esempio: Gentle Dom, Artista Maledetto...", "coach_arch_desc_ph": "Descrivi qui come dovrebbe comportarsi l'archetipo..."
     },
     "English": {
-        "title": "⚖️ Social Dynamics Sandbox v4.21",
+        "title": "⚖️ Social Dynamics Sandbox v4.22",
         "age_warning": "🔞 **WARNING:** This app explores adult relationship dynamics and may contain explicit/NSFW themes. You must be 18+ to use it.",
         "tab_sim": "🎮 Simulator", "tab_coach": "🧠 Coach Room",
         "setup": "Configure your game:", "name_u": "Your Name", "sex_u": "👤 Your Gender", "age": "🎂 Your Age",
@@ -145,7 +145,7 @@ UI = {
         "coach_arch_name_ph": "Example: Gentle Dom, Cursed Artist...", "coach_arch_desc_ph": "Describe how the archetype should behave here..."
     },
     "中文": {
-        "title": "⚖️ 社交动态沙盒 v4.21",
+        "title": "⚖️ 社交动态沙盒 v4.22",
         "age_warning": "🔞 **警告：** 此应用探索成人关系动态，可能包含露骨/NSFW主题。您必须年满18岁才能使用。",
         "tab_sim": "🎮 模拟器", "tab_coach": "🧠 教练室",
         "setup": "配置你的游戏：", "name_u": "你的名字", "sex_u": "👤 你的性别", "age": "🎂 你的年龄",
@@ -167,7 +167,7 @@ UI = {
         "coach_arch_name_ph": "示例：温柔的统治者，被诅咒的艺术家...", "coach_arch_desc_ph": "在这里描述原型应该如何表现..."
     },
     "日本語": {
-        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.21",
+        "title": "⚖️ ソーシャルダイナミクス サンドボックス v4.22",
         "age_warning": "🔞 **警告:** このアプリは大人の恋愛ダイナミクスを探求しており、露骨な/NSFWなテーマを含む可能性があります。18歳以上である必要があります。",
         "tab_sim": "🎮 シミュレーター", "tab_coach": "🧠 コーチルーム",
         "setup": "ゲームの設定:", "name_u": "あなたの名前", "sex_u": "👤 あなたの性別", "age": "🎂 あなたの年齢",
@@ -426,7 +426,7 @@ with tab_sim:
                         prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi SOLO generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto). Fatto questo, inserisci un separatore (---) e scrivi ESATTAMENTE E SOLO questa frase: '[IN ATTESA DEL PRIMO MESSAGGIO DELL'UTENTE]'. È ASSOLUTAMENTE VIETATO generare la tua prima battuta o salutare. Fermati in attesa."
                     else:
                         # 20% delle volte l'IA fa il profilo E manda anche la prima battuta.
-                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]:. È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente."
+                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]: (SU DUE RIGHE SEPARATE). È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente."
 
                     try:
                         chat = model.start_chat(history=[])
@@ -492,7 +492,7 @@ with tab_sim:
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
                     
                     elif st.session_state.modalita_attiva == t["mode_gym"]:
-                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 60 messaggi totali (30 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 60) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Sii un arbitro flessibile: tollera lievi sbavature o test (fino a 2 errori lievi) penalizzandolo solo nel roleplay. Dichiara [GAME OVER] e genera la Chat da Maestro SOLO SE l'utente fa un errore gravissimo (es. supplicare, fare la vittima) o accumula 3 errori lievi consecutivi senza riprendersi dal Frame."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
@@ -524,7 +524,7 @@ with tab_sim:
                         elif user_turns == MAX_TURNS_EXP - 1: prompt_ai += "\n\n[SISTEMA]: Questo è il tuo ULTIMO messaggio. Saluta definitivamente e chiudi la conversazione in modo coerente, poi esci dalla chat."
                     
                     elif st.session_state.modalita_attiva == t["mode_gym"]:
-                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Se è ancora coerente, rispondi con un SOLO turno ([MOOD] e [MESSAGGIO]). Se invece esce dal Frame o sbaglia gravemente, dichiara [GAME OVER] e genera IMMEDIATAMENTE in quello stesso output la 'Chat da Maestro' completa di ESATTAMENTE 60 messaggi totali (30 scambi botta e risposta, numerati RIGOROSAMENTE da 1 a 60) per mostrare l'esecuzione perfetta di questo archetipo dall'inizio. NON usare puntini di sospensione e non riassumere."
+                        prompt_ai += "\n\n[SISTEMA - CONTROLLO FRAME]: Valuta il Frame dell'utente. Sii un arbitro flessibile: tollera lievi sbavature o test (fino a 2 errori lievi) penalizzandolo solo nel roleplay. Dichiara [GAME OVER] e genera la Chat da Maestro SOLO SE l'utente fa un errore gravissimo (es. supplicare, fare la vittima) o accumula 3 errori lievi consecutivi senza riprendersi dal Frame."
 
                     try:
                         safe_hist = clone_chat_history(st.session_state.gemini_history)
