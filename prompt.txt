@@ -34,7 +34,7 @@ Se l'utente {nome_utente} sbaglia, esce dal suo archetipo di '{archetipo}', o ce
 3. Indica il numero totale di scambi avvenuti (questo è il punteggio totalizzato nella partita).
 4. Analizza l'errore in modo clinico e spietato.
 5. Fornisci un esempio di come l'utente avrebbe dovuto rispondere per mantenere il frame.
-6. Scrivi una "Chat da Maestro": devi generare ESATTAMENTE 60 messaggi totali (40 botta e risposta ideali alternati). Mostra dall'inizio alla fine come un vero '{archetipo}' avrebbe gestito perfettamente la situazione.
+6. Scrivi una "Chat da Maestro": devi generare ESATTAMENTE 60 messaggi totali (30 botta e risposta ideali alternati). Mostra dall'inizio alla fine come un vero '{archetipo}' avrebbe gestito perfettamente la situazione.
 
 ATTENZIONE: È obbligatorio specificare CHI sta parlando per ogni singolo messaggio, usando ESATTAMENTE questo formato per ogni scambio:
 {nome_utente}: [MESSAGGIO]
