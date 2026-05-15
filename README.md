@@ -27,4 +27,4 @@ Built using **Python**, **Streamlit**, and the **Google Gemini API**, this appli
 * **Styling:** Custom CSS & HTML injection
 
 ## 🔞 Disclaimer & Safety
-This application explores adult relationship dynamics and contains explicit/NSFW textual themes. It is designed for educational and entertainment purposes for users aged 18 and over. The "Safety Settings" are configured to BLOCK_NONE to allow for realistic romantic roleplay; use with discretion.
+This application explores adult relationship dynamics and contains explicit/NSFW textual themes. It is designed for educational and entertainment purposes for users aged 18 and over. The "Safety Settings" are configured to `BLOCK_NONE` to allow for realistic romantic roleplay; use with discretion.
