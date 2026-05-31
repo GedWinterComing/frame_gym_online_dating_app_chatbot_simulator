@@ -18,33 +18,13 @@ try:
 except Exception:
     api_key = os.getenv("GEMINI_API_KEY")
 
-# --- SISTEMA DI LOGIN (PROTEZIONE API) ---
-def check_password():
-    if "password_correct" not in st.session_state:
-        st.session_state["password_correct"] = False
-
-    if not st.session_state["password_correct"]:
-        st.title("🔒 Accesso Riservato")
-        st.write("Questa applicazione è protetta. Inserisci la password per accedere al Simulatore.")
-        
-        pwd = st.text_input("Password", type="password")
-        
-        try:
-            secret_pwd = st.secrets["APP_PASSWORD"]
-        except Exception:
-            secret_pwd = os.getenv("APP_PASSWORD", "admin")
-            
-        if st.button("Entra"):
-            if pwd == secret_pwd:
-                st.session_state["password_correct"] = True
-                st.rerun()
-            else:
-                st.error("❌ Password errata.")
-        return False
-    return True
-
-if not check_password():
-    st.stop()
+# --- FUNZIONE DI VERIFICA PASSWORD (NON BLOCCANTE) ---
+def verify_password(pwd):
+    try:
+        secret_pwd = st.secrets["APP_PASSWORD"]
+    except Exception:
+        secret_pwd = os.getenv("APP_PASSWORD", "admin")
+    return pwd == secret_pwd
 
 try:
     gabri_lore = st.secrets["GABRI_LORE"]
@@ -262,6 +242,7 @@ if "ui_messages" not in st.session_state: st.session_state.ui_messages = []
 if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italiano"
 if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
 if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
+if "api_unlocked" not in st.session_state: st.session_state.api_unlocked = False
 
 st.markdown("""
     <style>
@@ -385,7 +366,21 @@ with tab_sim:
                 st.rerun()
                 
             with c2:
-                if st.button(t["start"], type="primary", use_container_width=True):
+                # --- NUOVA GESTIONE LOGIN INLINE ---
+                start_clicked = False
+                if not st.session_state.api_unlocked:
+                    pwd_sim = st.text_input("🔒 Password per avviare l'IA", type="password", placeholder="Richiesta per API...")
+                    if st.button(t["start"], type="primary", use_container_width=True):
+                        if verify_password(pwd_sim):
+                            st.session_state.api_unlocked = True
+                            start_clicked = True
+                        else:
+                            st.error("❌ Password errata.")
+                else:
+                    if st.button(t["start"], type="primary", use_container_width=True):
+                        start_clicked = True
+                        
+                if start_clicked:
                     st.session_state.goth_active = goth_toggle
                     st.session_state.modalita_attiva = modalita
                     st.session_state.archetipo_scelto = names[1] 
@@ -544,7 +539,22 @@ with tab_coach:
     c_arch_desc = st.text_area(t["coach_arch_desc"], placeholder=t["coach_arch_desc_ph"])
     st.markdown("---")
     c_input = st.text_area(t["coach_desc"], height=300)
-    if st.button(t["coach_btn"], type="primary"):
+    
+    # --- NUOVA GESTIONE LOGIN INLINE PER LA COACH ROOM ---
+    coach_clicked = False
+    if not st.session_state.api_unlocked:
+        pwd_coach = st.text_input("🔒 Password per sbloccare l'IA", type="password", key="pwd_coach")
+        if st.button(t["coach_btn"], type="primary"):
+            if verify_password(pwd_coach):
+                st.session_state.api_unlocked = True
+                coach_clicked = True
+            else:
+                st.error("❌ Password errata.")
+    else:
+        if st.button(t["coach_btn"], type="primary"):
+            coach_clicked = True
+            
+    if coach_clicked:
         with st.spinner("..."):
             prompt_coach = f"Sei l'Arbitro. Analizza la chat in {st.session_state.lang_choice}."
             if c_arch_name and c_arch_desc:
