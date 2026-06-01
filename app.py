@@ -243,6 +243,7 @@ if "lang_choice" not in st.session_state: st.session_state.lang_choice = "Italia
 if "nome_utente" not in st.session_state: st.session_state.nome_utente = "Anon"
 if "pending_user_msg" not in st.session_state: st.session_state.pending_user_msg = None
 if "api_unlocked" not in st.session_state: st.session_state.api_unlocked = False
+if "show_report" not in st.session_state: st.session_state.show_report = False
 
 st.markdown("""
     <style>
@@ -271,15 +272,14 @@ st.session_state.lang_choice = st.selectbox("🌐 Language / Lingua / 语言 / �
 t = UI[st.session_state.lang_choice]
 desc = ARCH_DESC[st.session_state.lang_choice]
 
-# LIMITE TURNI SOLO PER MODALITÀ ESPERIENZA (25 messaggi utente = 50 messaggi totali)
-MAX_TURNS_EXP = 25
+# LIMITE TURNI SOLO PER MODALITÀ ESPERIENZA (20 messaggi utente = 40 messaggi totali)
+MAX_TURNS_EXP = 20
 
 tab_sim, tab_coach = st.tabs([t["tab_sim"], t["tab_coach"]])
 
 with tab_sim:
     if not st.session_state.ui_messages:
         st.title(t["title"])
-        # AVVISO 18+ AGGIUNTO QUI SOTTO AL TITOLO
         st.warning(t["age_warning"])
         
         st.write(t["setup"])
@@ -366,7 +366,6 @@ with tab_sim:
                 st.rerun()
                 
             with c2:
-                # --- NUOVA GESTIONE LOGIN INLINE ---
                 start_clicked = False
                 if not st.session_state.api_unlocked:
                     pwd_sim = st.text_input("🔒 Password per avviare l'IA", type="password", placeholder="Richiesta per API...")
@@ -410,18 +409,15 @@ with tab_sim:
                             if dinamica == t["desired"]: prompt_init += f"\n[DINAMICA]: L'utente è il Diffidente. Tu (IA) fai la corte."
                             else: prompt_init += f"\n[DINAMICA]: L'utente è il Seduttore. Tu (IA) fai molta resistenza."
                         else:
-                            prompt_init = base_instruction + f"TU sei l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu."
+                            prompt_init = base_instruction + f"L'utente si chiama {nome_u} ed è {sesso_u}. TU (l'IA) DEVI assolutamente essere {sesso_p} e interpreti l'archetipo: '{st.session_state.archetipo_scelto}'. Descrizione: {desc[st.session_state.archetipo_scelto]}. Inizia tu."
                         
                     if goth_toggle:
                         prompt_init += "\n[MODALITÀ GOTICA ATTIVA - REGOLA COLORI TASSATIVA]: Il partner è Goth. DEVI usare la formattazione HTML per colorare almeno 1 o 2 parole chiave in OGNI tuo [MESSAGGIO] (es. <span style='color:magenta'>oscurità</span>). Usa SOLO: magenta, cyan, limegreen, red. Usa molto il *corsivo*."
                     
-                    # LOGICA RANDOMICA 80/20 PER DECIDERE CHI SCRIVE PER PRIMO
                     if random.random() < 0.8:
-                        # 80% delle volte l'IA fa solo il profilo e si ferma, aspettando te.
-                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi SOLO generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto). Fatto questo, inserisci un separatore (---) e scrivi ESATTAMENTE E SOLO questa frase: '[IN ATTESA DEL PRIMO MESSAGGIO DELL'UTENTE]'. È ASSOLUTAMENTE VIETATO generare la tua prima battuta o salutare. Fermati in attesa."
+                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi SOLO generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto rigorosamente IN TERZA PERSONA OGGETTIVA, es. '[FOTO 1]: Si vede [Nome] che...'). Fatto questo, inserisci un separatore (---) e scrivi ESATTAMENTE E SOLO questa frase: '[IN ATTESA DEL PRIMO MESSAGGIO DELL'UTENTE]'. È ASSOLUTAMENTE VIETATO generare la tua prima battuta o salutare. Fermati in attesa."
                     else:
-                        # 20% delle volte l'IA fa il profilo E manda anche la prima battuta.
-                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]: (SU DUE RIGHE SEPARATE). È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente."
+                        prompt_init += "\n\n[REGOLA FONDAMENTALE DI OUTPUT]: Per questo tuo PRIMO output, devi PRIMA generare il tuo 'Profilo' (scrivi il tuo Nome fittizio, Età, Passioni, Bio e descrivi visivamente le Foto rigorosamente IN TERZA PERSONA OGGETTIVA, es. '[FOTO 1]: Si vede [Nome] che...'). Fatto questo, vai a capo, inserisci un separatore (---) e scrivi la tua prima battuta rivolta all'utente usando ESCLUSIVAMENTE [MOOD]: e [MESSAGGIO]: (SU DUE RIGHE SEPARATE). È ASSOLUTAMENTE VIETATO generare un copione intero o simulare le risposte dell'utente."
 
                     try:
                         chat = model.start_chat(history=[])
@@ -443,6 +439,8 @@ with tab_sim:
             if st.button(t["back_btn"], use_container_width=True):
                 st.session_state.ui_messages = []
                 st.session_state.pending_user_msg = None
+                st.session_state.goth_active = False 
+                st.session_state.show_report = False 
                 st.rerun()
         
         with col_report:
@@ -540,7 +538,6 @@ with tab_coach:
     st.markdown("---")
     c_input = st.text_area(t["coach_desc"], height=300)
     
-    # --- NUOVA GESTIONE LOGIN INLINE PER LA COACH ROOM ---
     coach_clicked = False
     if not st.session_state.api_unlocked:
         pwd_coach = st.text_input("🔒 Password per sbloccare l'IA", type="password", key="pwd_coach")
@@ -560,6 +557,6 @@ with tab_coach:
             if c_arch_name and c_arch_desc:
                 prompt_coach += f" L'utente deve mantenere il Frame dell'archetipo '{c_arch_name}'. Regole: {c_arch_desc}."
             
-            prompt_coach += f" Indica il Frame e un punteggio da 0 a 10. INFINE, è ASSOLUTAMENTE OBBLIGATORIO generare una 'Chat da Maestro' completa di ESATTAMENTE 60 messaggi totali (30 scambi completi botta e risposta, numerati rigorosamente da 1 a 60) per mostrare l'esecuzione perfetta. NON riassumere, NON usare puntini di sospensione. Scrivi tutti i 60 messaggi per intero. CHAT:\n<chat>{c_input}</chat>"
+            prompt_coach += f" Indica il Frame e un punteggio da 0 a 10. INFINE, è ASSOLUTAMENTE OBBLIGATORIO generare una 'Chat da Maestro' completa di ESATTAMENTE 40 messaggi totali (20 scambi completi botta e risposta, numerati rigorosamente da 1 a 40) per mostrare l'esecuzione perfetta. NON riassumere, NON usare puntini di sospensione. Scrivi tutti i 40 messaggi per intero. CHAT:\n<chat>{c_input}</chat>"
             res = model.generate_content(prompt_coach)
             st.markdown(res.text)
